@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<title>Traast — Product Demo</title>
+
+<style>
+  :root {
+    --navy: #0D1B2A;
+    --navy-2: #13263A;
+    --blue: #2563EB;
+    --blue-soft: #EFF4FE;
+    --cyan: #06B6D4;
+    --indigo: #6366F1;
+    --ink: #111827;
+    --muted: #6B7280;
+    --bg: #F9FAFB;
+    --card: #FFFFFF;
+    --line: #E5E7EB;
+    --good: #059669;
+    --good-soft: #ECFDF5;
+    --font: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { height: 100%; }
+
+  body {
+    font-family: var(--font);
+    background:
+      radial-gradient(1200px 600px at 70% -10%, rgba(37,99,235,.18), transparent 60%),
+      radial-gradient(900px 500px at 10% 110%, rgba(6,182,212,.10), transparent 55%),
+      var(--navy);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 28px 16px 48px;
+  }
+
+  button { font-family: var(--font); cursor: pointer; }
+  [hidden] { display: none !important; }
+
+  .wordmark { font-weight: 800; letter-spacing: -0.02em; }
+  .wordmark .dot { color: var(--cyan); }
+
+  /* ---------- Splash ---------- */
+  #splash {
+    max-width: 760px;
+    text-align: center;
+    color: #fff;
+    animation: rise .7s ease both;
+  }
+  #splash .wordmark { font-size: 56px; }
+  #splash .tagline {
+    font-size: 26px;
+    font-weight: 600;
+    margin-top: 18px;
+    line-height: 1.3;
+    text-wrap: balance;
+  }
+  #splash .sub {
+    color: rgba(255,255,255,.65);
+    margin-top: 10px;
+    font-size: 15px;
+  }
+  .statrow {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 34px;
+    flex-wrap: wrap;
+  }
+  .stat {
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 12px;
+    padding: 16px 22px;
+    min-width: 170px;
+  }
+  .stat b {
+    display: block;
+    font-size: 30px;
+    font-weight: 800;
+    color: #fff;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat span { font-size: 13px; color: rgba(255,255,255,.65); }
+  .stat b .accent { color: var(--cyan); }
+
+  .splash-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 34px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    border: 0;
+    border-radius: 10px;
+    padding: 13px 24px;
+    font-size: 15px;
+    font-weight: 600;
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
+  .btn-primary { background: var(--blue); color: #fff; box-shadow: 0 8px 24px rgba(37,99,235,.35); }
+  .btn-ghost { background: rgba(255,255,255,.08); color: #fff; border: 1px solid rgba(255,255,255,.22); }
+  .fineprint { margin-top: 26px; font-size: 12px; color: rgba(255,255,255,.4); }
+
+  /* ---------- App window ---------- */
+  #app {
+    width: min(1060px, 100%);
+    animation: rise .5s ease both;
+  }
+  .window {
+    background: var(--bg);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(2,8,20,.55);
+  }
+  .chrome {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--navy-2);
+    padding: 10px 14px;
+  }
+  .chrome .dots { display: flex; gap: 6px; }
+  .chrome .dots i {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: rgba(255,255,255,.22); display: block;
+  }
+  .chrome .url {
+    flex: 1;
+    max-width: 320px;
+    margin: 0 auto;
+    background: rgba(255,255,255,.08);
+    color: rgba(255,255,255,.6);
+    border-radius: 6px;
+    font-size: 12px;
+    padding: 5px 12px;
+    text-align: center;
+  }
+  .chrome .wordmark { color: #fff; font-size: 15px; }
+
+  /* Step nav */
+  .stepnav {
+    display: flex;
+    background: var(--card);
+    border-bottom: 1px solid var(--line);
+    padding: 0 10px;
+  }
+  .stepnav button {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: none;
+    border: 0;
+    border-bottom: 3px solid transparent;
+    padding: 13px 10px;
+    text-align: left;
+    color: var(--muted);
+  }
+  .stepnav button .num {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    border: 2px solid var(--line);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+    flex: none;
+    color: var(--muted);
+    background: var(--card);
+  }
+  .stepnav button .lbl { display: flex; flex-direction: column; min-width: 0; }
+  .stepnav button .lbl b { font-size: 13.5px; color: inherit; white-space: nowrap; }
+  .stepnav button .lbl span {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--muted);
+  }
+  .stepnav button.active { color: var(--ink); border-bottom-color: var(--blue); }
+  .stepnav button.active .num { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .stepnav button.done .num { background: var(--good); border-color: var(--good); color: #fff; }
+
+  /* Views */
+  .views { min-height: 470px; padding: 22px; }
+  .view { animation: fadein .35s ease both; }
+  .view-head { margin-bottom: 16px; }
+  .view-head h2 {
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  .view-head p { color: var(--muted); font-size: 14px; margin-top: 4px; }
+  .daytag {
+    display: inline-block;
+    background: var(--blue-soft);
+    color: var(--blue);
+    font-size: 11.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    border-radius: 999px;
+    padding: 4px 12px;
+    margin-bottom: 8px;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+  }
+
+  /* ---------- Step 1: chat + role intelligence ---------- */
+  .intake-grid {
+    display: grid;
+    grid-template-columns: 1.15fr .85fr;
+    gap: 16px;
+    align-items: start;
+  }
+  .chat { display: flex; flex-direction: column; height: 384px; }
+  .chat-head {
+    display: flex; align-items: center; gap: 9px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line);
+    font-size: 13.5px; font-weight: 600;
+  }
+  .livedot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--good);
+    box-shadow: 0 0 0 0 rgba(5,150,105,.5);
+    animation: pulse 2s infinite;
+  }
+  .chat-head span { color: var(--muted); font-weight: 400; font-size: 12.5px; }
+  .chat-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .msg {
+    max-width: 82%;
+    padding: 9px 13px;
+    border-radius: 12px;
+    font-size: 13.5px;
+    line-height: 1.45;
+    animation: msgin .3s ease both;
+  }
+  .msg.agent { background: var(--bg); border: 1px solid var(--line); border-bottom-left-radius: 4px; align-self: flex-start; }
+  .msg.user { background: var(--blue); color: #fff; border-bottom-right-radius: 4px; align-self: flex-end; }
+  .msg.system {
+    align-self: center;
+    background: var(--good-soft);
+    color: var(--good);
+    font-weight: 600;
+    font-size: 12.5px;
+    border-radius: 999px;
+    padding: 6px 14px;
+  }
+  .typing { display: inline-flex; gap: 4px; align-items: center; padding: 4px 2px; }
+  .typing i {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--muted); opacity: .5;
+    animation: blink 1s infinite;
+  }
+  .typing i:nth-child(2) { animation-delay: .2s; }
+  .typing i:nth-child(3) { animation-delay: .4s; }
+
+  .intel { padding: 16px; }
+  .intel-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+  .intel-head b { font-size: 13.5px; }
+  .intel-head span { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .intel-bar {
+    height: 5px; border-radius: 999px;
+    background: var(--line);
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+  .intel-bar i {
+    display: block; height: 100%; width: 0%;
+    background: linear-gradient(90deg, var(--blue), var(--cyan));
+    transition: width .6s ease;
+  }
+  .field { padding: 9px 0; border-bottom: 1px solid var(--bg); }
+  .field:last-child { border-bottom: 0; }
+  .field .k {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+    color: var(--muted);
+    margin-bottom: 3px;
+  }
+  .field .v { font-size: 13.5px; font-weight: 600; min-height: 19px; }
+  .field .v .skeleton {
+    display: inline-block;
+    width: 60%; height: 11px;
+    border-radius: 4px;
+    background: var(--line);
+  }
+  .field.filled .v { animation: fillin .4s ease both; }
+  .chip {
+    display: inline-block;
+    background: var(--blue-soft);
+    color: var(--blue);
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-size: 12px;
+    font-weight: 600;
+    margin: 2px 3px 0 0;
+  }
+
+  /* ---------- Step 2: engine ---------- */
+  .pipe {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+  }
+  .stage {
+    padding: 14px;
+    position: relative;
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  .stage.on { animation: rise .45s ease both; }
+  .stage .icon {
+    width: 34px; height: 34px;
+    border-radius: 9px;
+    background: var(--blue-soft);
+    color: var(--blue);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 10px;
+  }
+  .stage:nth-child(even) .icon { background: #E9FBFE; color: var(--cyan); }
+  .stage b { display: block; font-size: 13px; margin-bottom: 8px; }
+  .stage .count {
+    font-size: 25px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+  .stage .sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .stage .arrow {
+    position: absolute;
+    right: -13px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 14px;
+    z-index: 1;
+  }
+  .loopband {
+    margin-top: 16px;
+    border: 1px dashed var(--indigo);
+    background: #F5F5FF;
+    border-radius: 12px;
+    padding: 13px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--ink);
+    font-size: 13.5px;
+    opacity: 0;
+  }
+  .loopband.on { animation: fadein .5s ease both; }
+  .loopband .loopicon {
+    color: var(--indigo);
+    flex: none;
+    animation: spin 6s linear infinite;
+    display: flex;
+  }
+  .loopband b { color: var(--indigo); }
+
+  /* ---------- Step 3: slate ---------- */
+  .calstrip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    margin-bottom: 14px;
+    font-size: 13px;
+    flex-wrap: wrap;
+  }
+  .calstrip .cal-k { font-weight: 600; display: flex; align-items: center; gap: 8px; }
+  .slot {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 5px 12px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ink);
+    background: var(--card);
+  }
+  .slot.booked { background: var(--good-soft); border-color: var(--good); color: var(--good); }
+  .slate { display: flex; flex-direction: column; gap: 9px; }
+  .cand {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 11px 14px;
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  .cand.on { animation: rise .4s ease both; }
+  .cand .avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 13px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex: none;
+  }
+  .cand .who { min-width: 0; flex: 1; }
+  .cand .who b { font-size: 14px; display: block; }
+  .cand .who span { font-size: 12.5px; color: var(--muted); }
+  .cand .sig { display: flex; gap: 5px; flex-wrap: wrap; justify-content: flex-end; }
+  .sigchip {
+    font-size: 11.5px;
+    font-weight: 600;
+    border-radius: 999px;
+    padding: 3px 9px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .sigchip.hot { background: var(--blue-soft); border-color: transparent; color: var(--blue); }
+  .cand .match {
+    text-align: right;
+    flex: none;
+    width: 58px;
+  }
+  .cand .match b {
+    font-size: 19px; font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    color: var(--blue);
+  }
+  .cand .match span { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  .bookbtn {
+    border: 1px solid var(--blue);
+    background: var(--card);
+    color: var(--blue);
+    border-radius: 8px;
+    padding: 7px 14px;
+    font-size: 12.5px;
+    font-weight: 700;
+    flex: none;
+    width: 128px;
+    transition: background .15s ease;
+  }
+  .bookbtn:hover { background: var(--blue-soft); }
+  .bookbtn.booked {
+    background: var(--good-soft);
+    border-color: var(--good);
+    color: var(--good);
+    cursor: default;
+  }
+
+  /* ---------- Step 4: placement ---------- */
+  .place-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 16px;
+    align-items: stretch;
+  }
+  .placed {
+    padding: 24px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    opacity: 0;
+  }
+  .placed.on { animation: rise .5s ease both; }
+  .placed .bigcheck {
+    width: 54px; height: 54px;
+    border-radius: 50%;
+    background: var(--good-soft);
+    color: var(--good);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 6px;
+  }
+  .placed h3 { font-size: 17px; }
+  .placed p { color: var(--muted); font-size: 13.5px; }
+  .placed .timeline {
+    margin-top: 12px;
+    display: flex;
+    gap: 8px;
+    font-size: 11.5px;
+    color: var(--muted);
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .tl-dot { display: flex; align-items: center; gap: 5px; }
+  .tl-dot i { width: 7px; height: 7px; border-radius: 50%; background: var(--cyan); display: block; }
+
+  .compare { padding: 20px; opacity: 0; }
+  .compare.on { animation: rise .5s .25s ease both; }
+  .compare h3 { font-size: 15px; margin-bottom: 14px; }
+  .cmp-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .cmp {
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 13px;
+  }
+  .cmp.traast { background: var(--navy); color: #fff; }
+  .cmp.agency { background: var(--bg); border: 1px solid var(--line); color: var(--muted); }
+  .cmp .cmp-t { font-size: 12px; text-transform: uppercase; letter-spacing: .07em; opacity: .7; }
+  .cmp .cmp-price { font-size: 23px; font-weight: 800; margin: 6px 0 8px; letter-spacing: -0.02em; }
+  .cmp.traast .cmp-price { color: var(--cyan); }
+  .cmp ul { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+  .cmp li { padding-left: 16px; position: relative; line-height: 1.4; }
+  .cmp.traast li::before { content: "✓"; position: absolute; left: 0; color: var(--cyan); font-weight: 700; }
+  .cmp.agency li::before { content: "✕"; position: absolute; left: 0; color: #DC2626; font-weight: 700; }
+  .bigline {
+    margin-top: 14px;
+    font-size: 14.5px;
+    font-weight: 700;
+    text-align: center;
+  }
+  .bigline .accent { color: var(--blue); }
+
+  /* Footer bar */
+  .footbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 22px;
+    border-top: 1px solid var(--line);
+    background: var(--card);
+  }
+  .footbar .note { font-size: 11.5px; color: var(--muted); }
+  .navbtns { display: flex; gap: 8px; }
+  .nextbtn {
+    background: var(--blue);
+    color: #fff;
+    border: 0;
+    border-radius: 9px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .backbtn {
+    background: var(--card);
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  /* ---------- Video captions ---------- */
+  #caption {
+    position: fixed;
+    left: 50%;
+    bottom: 22px;
+    transform: translateX(-50%);
+    width: min(860px, calc(100% - 32px));
+    background: rgba(13,27,42,.92);
+    border: 1px solid rgba(255,255,255,.15);
+    color: #fff;
+    border-radius: 12px;
+    padding: 13px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    z-index: 50;
+    backdrop-filter: blur(6px);
+  }
+  #caption .cap-day {
+    flex: none;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .09em;
+    color: var(--cyan);
+    text-transform: uppercase;
+  }
+  #caption .cap-text { font-size: 14.5px; flex: 1; }
+  #caption .exitbtn {
+    flex: none;
+    background: rgba(255,255,255,.1);
+    border: 1px solid rgba(255,255,255,.25);
+    color: #fff;
+    border-radius: 7px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  #caption .progress {
+    position: absolute;
+    left: 0; bottom: 0;
+    height: 3px;
+    background: var(--cyan);
+    border-radius: 0 0 0 12px;
+    width: 0%;
+  }
+
+  /* ---------- End frame ---------- */
+  #endframe {
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(1000px 500px at 70% 0%, rgba(37,99,235,.25), transparent 60%),
+      var(--navy);
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+    padding: 20px;
+  }
+  #endframe .inner { animation: rise .7s ease both; max-width: 760px; }
+  #endframe .wordmark { font-size: 44px; }
+  #endframe .tagline { font-size: 21px; font-weight: 600; margin-top: 12px; color: rgba(255,255,255,.9); }
+
+  /* ---------- Animations ---------- */
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes msgin { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fillin { from { opacity: 0; transform: translateX(-6px); } to { opacity: 1; transform: translateX(0); } }
+  @keyframes blink { 0%,100% { opacity: .25; } 50% { opacity: .9; } }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(5,150,105,.45); }
+    70% { box-shadow: 0 0 0 8px rgba(5,150,105,0); }
+    100% { box-shadow: 0 0 0 0 rgba(5,150,105,0); }
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes capgrow { from { width: 0%; } to { width: 100%; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01s !important; transition-duration: .01s !important; }
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 880px) {
+    body { padding: 14px 10px 90px; align-items: flex-start; }
+    .intake-grid, .place-grid, .cmp-cols { grid-template-columns: 1fr; }
+    .chat { height: 330px; }
+    .pipe { grid-template-columns: repeat(2, 1fr); }
+    .pipe .stage:last-child { grid-column: span 2; }
+    .stage .arrow { display: none; }
+    .stepnav button .lbl span { display: none; }
+    .stepnav button .lbl b { white-space: normal; font-size: 12px; }
+    .stepnav { overflow-x: auto; }
+    .cand { flex-wrap: wrap; }
+    .cand .sig { justify-content: flex-start; width: 100%; order: 5; }
+    #splash .wordmark { font-size: 40px; }
+    #splash .tagline { font-size: 20px; }
+    .views { padding: 14px; min-height: 0; }
+  }
+</style>
+
+<!-- ================= SPLASH ================= -->
+<div id="splash">
+  <div class="wordmark">traast<span class="dot">.</span></div>
+  <div class="tagline">Hiring as efficient as ordering an Uber.</div>
+  <div class="sub">A software-driven recruiting service that delivers qualified interviews within days.</div>
+
+  <div class="statrow">
+    <div class="stat"><b>1–3 <span class="accent">days</span></b><span>to first interview</span></div>
+    <div class="stat"><b>5</b><span>pre-vetted candidates</span></div>
+    <div class="stat"><b>30<span class="accent">×</span></b><span>cheaper than agency fees</span></div>
+  </div>
+
+  <div class="splash-actions">
+    <button class="btn btn-primary" id="playBtn">▶&nbsp; Play demo</button>
+    <button class="btn btn-ghost" id="exploreBtn">Explore step by step</button>
+  </div>
+  <div class="fineprint">Product demo — illustrative data. Follow the journey of Alex, CTO of a seed-stage startup in Austin, TX.</div>
+</div>
+
+<!-- ================= APP ================= -->
+<div id="app" hidden>
+  <div class="window">
+    <div class="chrome">
+      <div class="dots"><i></i><i></i><i></i></div>
+      <div class="url">app.traast.com</div>
+      <div class="wordmark">traast<span class="dot">.</span></div>
+    </div>
+
+    <div class="stepnav" id="stepnav">
+      <button data-step="1"><span class="num">1</span><span class="lbl"><b>Define the role</b><span>Day 0 · 30 min</span></span></button>
+      <button data-step="2"><span class="num">2</span><span class="lbl"><b>Traast engine</b><span>Hours, not weeks</span></span></button>
+      <button data-step="3"><span class="num">3</span><span class="lbl"><b>Interviews booked</b><span>Day 1–3</span></span></button>
+      <button data-step="4"><span class="num">4</span><span class="lbl"><b>Placement</b><span>Success-based</span></span></button>
+    </div>
+
+    <div class="views">
+
+      <!-- STEP 1 -->
+      <section class="view" id="view1" hidden>
+        <div class="view-head">
+          <span class="daytag">Day 0</span>
+          <h2>Define the role once — a quick chat, not a 3-week brief</h2>
+          <p>Traast's intake agent turns one conversation into structured role intelligence.</p>
+        </div>
+        <div class="intake-grid">
+          <div class="card chat">
+            <div class="chat-head"><span class="livedot"></span>Traast intake agent&nbsp;<span>· online</span></div>
+            <div class="chat-body" id="chatBody"></div>
+          </div>
+          <div class="card intel">
+            <div class="intel-head"><b>Role intelligence</b><span id="intelPct">0%</span></div>
+            <div class="intel-bar"><i id="intelBar"></i></div>
+            <div class="field" data-f="role"><div class="k">Role</div><div class="v"><span class="skeleton"></span></div></div>
+            <div class="field" data-f="level"><div class="k">Seniority</div><div class="v"><span class="skeleton"></span></div></div>
+            <div class="field" data-f="skills"><div class="k">Must-have skills</div><div class="v"><span class="skeleton"></span></div></div>
+            <div class="field" data-f="comp"><div class="k">Compensation</div><div class="v"><span class="skeleton"></span></div></div>
+            <div class="field" data-f="loc"><div class="k">Location</div><div class="v"><span class="skeleton"></span></div></div>
+            <div class="field" data-f="sig"><div class="k">Engagement filter</div><div class="v"><span class="skeleton"></span></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 2 -->
+      <section class="view" id="view2" hidden>
+        <div class="view-head">
+          <span class="daytag">Hours later</span>
+          <h2>Behind the scenes: the engine does the heavy lifting</h2>
+          <p>Sourcing, ranking, outreach, qualification, scheduling — zero work on your side.</p>
+        </div>
+        <div class="pipe" id="pipe">
+          <div class="card stage">
+            <div class="icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></div>
+            <b>Sourcing</b>
+            <div class="count" data-target="2417">0</div>
+            <div class="sub">profiles scanned</div>
+            <span class="arrow">→</span>
+          </div>
+          <div class="card stage">
+            <div class="icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 17V9m6 8V5m6 12v-6m6 6V3"/></svg></div>
+            <b>Ranking</b>
+            <div class="count" data-target="312">0</div>
+            <div class="sub">strong role fits</div>
+            <span class="arrow">→</span>
+          </div>
+          <div class="card stage">
+            <div class="icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.6 8.6 0 0 1-3.4-.7L3 21l1.8-4.4a8.4 8.4 0 1 1 16.2-5.1z"/></svg></div>
+            <b>Engagement</b>
+            <div class="count" data-target="38">0</div>
+            <div class="sub">in live conversation</div>
+            <span class="arrow">→</span>
+          </div>
+          <div class="card stage">
+            <div class="icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+            <b>Qualification</b>
+            <div class="count" data-target="12">0</div>
+            <div class="sub">pre-vetted for you</div>
+            <span class="arrow">→</span>
+          </div>
+          <div class="card stage">
+            <div class="icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4m8-4v4M3 11h18"/></svg></div>
+            <b>Scheduling</b>
+            <div class="count" data-target="5">0</div>
+            <div class="sub">on your calendar</div>
+          </div>
+        </div>
+        <div class="loopband" id="loopband">
+          <span class="loopicon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg></span>
+          <span><b>Closed feedback loop:</b> every interview outcome flows back into ranking, screening, and outreach — every candidate makes the system smarter.</span>
+        </div>
+      </section>
+
+      <!-- STEP 3 -->
+      <section class="view" id="view3" hidden>
+        <div class="view-head">
+          <span class="daytag">Day 1–3</span>
+          <h2>Your slate is ready — interviews, not resumes</h2>
+          <p>Five pre-vetted, engaged candidates with interview slots already synced to your calendar.</p>
+        </div>
+        <div class="card calstrip">
+          <span class="cal-k"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4m8-4v4M3 11h18"/></svg>Proposed slots</span>
+          <span class="slot" id="slotA">Thu 10:00</span>
+          <span class="slot" id="slotB">Thu 13:30</span>
+          <span class="slot" id="slotC">Fri 09:00</span>
+          <span class="slot">Fri 14:00</span>
+        </div>
+        <div class="slate" id="slate"></div>
+      </section>
+
+      <!-- STEP 4 -->
+      <section class="view" id="view4" hidden>
+        <div class="view-head">
+          <span class="daytag">Day 19</span>
+          <h2>Placement made — and you only pay while it lasts</h2>
+          <p>Success-based, monthly, cash-flow-friendly. No upfront agency fee.</p>
+        </div>
+        <div class="place-grid">
+          <div class="card placed" id="placedCard">
+            <div class="bigcheck"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+            <h3>Jordan Reyes signed — Founding Backend Engineer</h3>
+            <p>Offer accepted on day 19. Traast verifies ongoing employment automatically.</p>
+            <div class="timeline">
+              <span class="tl-dot"><i></i>Day 0 · role defined</span>
+              <span class="tl-dot"><i></i>Day 2 · first interview</span>
+              <span class="tl-dot"><i></i>Day 19 · offer signed</span>
+            </div>
+          </div>
+          <div class="card compare" id="compareCard">
+            <h3>What you pay</h3>
+            <div class="cmp-cols">
+              <div class="cmp traast">
+                <div class="cmp-t">Traast</div>
+                <div class="cmp-price">$500/mo</div>
+                <ul>
+                  <li>Only while the employee stays</li>
+                  <li>Capped at 24 months</li>
+                  <li>Candidate leaves? We rehire for free</li>
+                </ul>
+              </div>
+              <div class="cmp agency">
+                <div class="cmp-t">Traditional agency</div>
+                <div class="cmp-price">$16K–$60K</div>
+                <ul>
+                  <li>Single upfront success fee</li>
+                  <li>No retention accountability</li>
+                  <li>Candidate leaves? Pay again</li>
+                </ul>
+              </div>
+            </div>
+            <div class="bigline">Up to <span class="accent">30× cheaper</span> — and optimized for fit by design.</div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <div class="footbar">
+      <span class="note">Traast product demo · illustrative data</span>
+      <div class="navbtns">
+        <button class="backbtn" id="backBtn">← Back</button>
+        <button class="nextbtn" id="nextBtn">Next →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= VIDEO CAPTION ================= -->
+<div id="caption" hidden>
+  <span class="cap-day" id="capDay">Day 0</span>
+  <span class="cap-text" id="capText"></span>
+  <button class="exitbtn" id="exitVideo">Exit ✕</button>
+  <span class="progress" id="capProg"></span>
+</div>
+
+<!-- ================= END FRAME ================= -->
+<div id="endframe" hidden>
+  <div class="inner">
+    <div class="wordmark">traast<span class="dot">.</span></div>
+    <div class="tagline">One chat in. Qualified interviews out.</div>
+    <div class="statrow">
+      <div class="stat"><b>1–3 <span class="accent">days</span></b><span>to first interview</span></div>
+      <div class="stat"><b>5</b><span>pre-vetted candidates</span></div>
+      <div class="stat"><b>30<span class="accent">×</span></b><span>cheaper than agency fees</span></div>
+    </div>
+    <div class="splash-actions">
+      <button class="btn btn-primary" id="replayBtn">▶&nbsp; Replay</button>
+      <button class="btn btn-ghost" id="backToDemoBtn">Explore step by step</button>
+    </div>
+    <div class="fineprint">traast.com · AI-native recruiting for US startups</div>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function d(ms) { return RM ? 0 : ms; }
+
+  var timers = [];
+  function at(ms, fn) { timers.push(setTimeout(fn, d(ms))); }
+  function clearTimers() { timers.forEach(clearTimeout); timers = []; }
+
+  var vTimers = [];
+  function vAt(ms, fn) { vTimers.push(setTimeout(fn, d(ms))); }
+  function clearVTimers() { vTimers.forEach(clearTimeout); vTimers = []; }
+
+  var splash = document.getElementById('splash');
+  var app = document.getElementById('app');
+  var caption = document.getElementById('caption');
+  var endframe = document.getElementById('endframe');
+  var nextBtn = document.getElementById('nextBtn');
+  var backBtn = document.getElementById('backBtn');
+  var stepnavBtns = Array.prototype.slice.call(document.querySelectorAll('#stepnav button'));
+
+  var current = 0;
+  var videoMode = false;
+
+  /* ---------- Step 1: chat ---------- */
+  var CHAT = [
+    { who: 'agent', text: "Welcome back, Alex 👋 What role are we opening today?", fill: [] },
+    { who: 'user',  text: "Founding Backend Engineer — our first senior infra hire.", fill: ['role', 'level'] },
+    { who: 'agent', text: "Got it. Which skills are must-haves, and what should this person own?", fill: [] },
+    { who: 'user',  text: "Python + AWS, strong distributed systems. They'll own our infra end-to-end.", fill: ['skills'] },
+    { who: 'agent', text: "Understood. Compensation range and location?", fill: [] },
+    { who: 'user',  text: "$170–210K plus equity. Austin, hybrid — 2 days on-site.", fill: ['comp', 'loc'] },
+    { who: 'agent', text: "Done — role intelligence is built. Sourcing starts now. Expect interview slots on your calendar within 72 hours.", fill: ['sig'] },
+    { who: 'system', text: "Role brief confirmed ✓", fill: [] }
+  ];
+
+  var INTEL = {
+    role:   'Founding Backend Engineer',
+    level:  'Senior / Staff',
+    skills: '<span class="chip">Python</span><span class="chip">AWS</span><span class="chip">Distributed systems</span>',
+    comp:   '$170–210K + equity',
+    loc:    'Austin, TX · Hybrid',
+    sig:    'Active signals, last 30 days'
+  };
+  var INTEL_TOTAL = 6;
+
+  function resetStep1() {
+    document.getElementById('chatBody').innerHTML = '';
+    document.getElementById('intelBar').style.width = '0%';
+    document.getElementById('intelPct').textContent = '0%';
+    Array.prototype.forEach.call(document.querySelectorAll('#view1 .field'), function (f) {
+      f.classList.remove('filled');
+      f.querySelector('.v').innerHTML = '<span class="skeleton"></span>';
+    });
+  }
+
+  function fillIntel(keys) {
+    keys.forEach(function (k) {
+      var f = document.querySelector('#view1 .field[data-f="' + k + '"]');
+      if (!f || f.classList.contains('filled')) return;
+      f.classList.add('filled');
+      f.querySelector('.v').innerHTML = INTEL[k];
+    });
+    var n = document.querySelectorAll('#view1 .field.filled').length;
+    var pct = Math.round(100 * n / INTEL_TOTAL);
+    document.getElementById('intelBar').style.width = pct + '%';
+    document.getElementById('intelPct').textContent = pct + '%';
+  }
+
+  function runStep1() {
+    resetStep1();
+    var body = document.getElementById('chatBody');
+    var tAcc = 400;
+    CHAT.forEach(function (m) {
+      var showTyping = (m.who === 'agent');
+      if (showTyping) {
+        (function (start) {
+          at(start, function () {
+            var ty = document.createElement('div');
+            ty.className = 'msg agent';
+            ty.id = 'typing';
+            ty.innerHTML = '<span class="typing"><i></i><i></i><i></i></span>';
+            body.appendChild(ty);
+            body.scrollTop = body.scrollHeight;
+          });
+        })(tAcc);
+        tAcc += 900;
+      }
+      (function (m2, start) {
+        at(start, function () {
+          var old = document.getElementById('typing');
+          if (old) old.remove();
+          var el = document.createElement('div');
+          el.className = 'msg ' + m2.who;
+          el.textContent = m2.text;
+          body.appendChild(el);
+          body.scrollTop = body.scrollHeight;
+          fillIntel(m2.fill);
+        });
+      })(m, tAcc);
+      tAcc += (m.who === 'user') ? 1300 : 1100;
+    });
+    if (RM) { CHAT.forEach(function (m) { fillIntel(m.fill); }); }
+  }
+
+  /* ---------- Step 2: engine ---------- */
+  function countUp(el, target, dur) {
+    if (RM) { el.textContent = target.toLocaleString('en-US'); return; }
+    var t0 = performance.now();
+    function frame(now) {
+      var p = Math.min(1, (now - t0) / dur);
+      var eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(target * eased).toLocaleString('en-US');
+      if (p < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+    /* rAF is frozen in background tabs — guarantee the final value regardless */
+    timers.push(setTimeout(function () {
+      el.textContent = target.toLocaleString('en-US');
+    }, dur + 150));
+  }
+
+  function runStep2() {
+    var stages = Array.prototype.slice.call(document.querySelectorAll('#pipe .stage'));
+    var loop = document.getElementById('loopband');
+    stages.forEach(function (s) { s.classList.remove('on'); s.querySelector('.count').textContent = '0'; });
+    loop.classList.remove('on');
+    void loop.offsetWidth; /* restart CSS animations on re-entry */
+    stages.forEach(function (s, i) {
+      at(300 + i * 850, function () {
+        s.classList.add('on');
+        countUp(s.querySelector('.count'), +s.querySelector('.count').dataset.target, 900);
+      });
+    });
+    at(300 + stages.length * 850 + 300, function () { loop.classList.add('on'); });
+  }
+
+  /* ---------- Step 3: slate ---------- */
+  var CANDS = [
+    { name: 'Jordan Reyes',    who: 'Staff Engineer · Nexbase',            match: 96, av: '#2563EB', sig: ['Python · AWS ✓', 'Replied in 2h', 'Open to move'] },
+    { name: 'Priya Raghavan',  who: 'Senior Backend Eng · Cloudline',      match: 93, av: '#06B6D4', sig: ['Distributed systems ✓', 'Salary fit', 'Replied in 4h'] },
+    { name: 'Tom Becker',      who: 'Founding Engineer (prev) · Loopwell', match: 91, av: '#6366F1', sig: ['0→1 experience', 'Austin local', 'Open to move'] },
+    { name: 'Emily Kang',      who: 'Senior SWE · Datashore',              match: 89, av: '#0D1B2A', sig: ['Python · AWS ✓', 'Salary fit'] },
+    { name: 'Marcus Webb',     who: 'Backend Engineer · Ferrostack',       match: 86, av: '#2563EB', sig: ['Infra ownership ✓', 'Replied in 6h'] }
+  ];
+  var SLOTS = ['Thu 10:00', 'Thu 13:30', 'Fri 09:00'];
+
+  function initials(name) {
+    return name.split(' ').map(function (w) { return w[0]; }).join('');
+  }
+
+  function buildSlate() {
+    var slate = document.getElementById('slate');
+    slate.innerHTML = '';
+    CANDS.forEach(function (c, i) {
+      var row = document.createElement('div');
+      row.className = 'card cand';
+      row.innerHTML =
+        '<span class="avatar" style="background:' + c.av + '">' + initials(c.name) + '</span>' +
+        '<span class="who"><b>' + c.name + '</b><span>' + c.who + '</span></span>' +
+        '<span class="sig">' + c.sig.map(function (s, j) {
+          return '<span class="sigchip' + (j === 0 ? ' hot' : '') + '">' + s + '</span>';
+        }).join('') + '</span>' +
+        '<span class="match"><b>' + c.match + '%</b><span>match</span></span>' +
+        '<button class="bookbtn" data-i="' + i + '">Book interview</button>';
+      slate.appendChild(row);
+    });
+    slate.addEventListener('click', function (e) {
+      var btn = e.target.closest('.bookbtn');
+      if (btn && !btn.classList.contains('booked')) book(+btn.dataset.i);
+    });
+  }
+
+  var bookedCount = 0;
+  function book(i) {
+    var btns = document.querySelectorAll('#slate .bookbtn');
+    var btn = btns[i];
+    if (!btn || btn.classList.contains('booked')) return;
+    var slot = SLOTS[Math.min(bookedCount, SLOTS.length - 1)];
+    btn.classList.add('booked');
+    btn.textContent = '✓ ' + slot;
+    var slotEls = [document.getElementById('slotA'), document.getElementById('slotB'), document.getElementById('slotC')];
+    if (slotEls[bookedCount]) slotEls[bookedCount].classList.add('booked');
+    bookedCount++;
+  }
+
+  function runStep3(autobook) {
+    bookedCount = 0;
+    buildSlate();
+    ['slotA', 'slotB', 'slotC'].forEach(function (id) {
+      document.getElementById(id).classList.remove('booked');
+    });
+    var rows = document.querySelectorAll('#slate .cand');
+    Array.prototype.forEach.call(rows, function (r, i) {
+      at(250 + i * 420, function () { r.classList.add('on'); });
+    });
+    if (autobook) {
+      at(3400, function () { book(0); });
+      at(4600, function () { book(1); });
+    }
+  }
+
+  /* ---------- Step 4 ---------- */
+  function runStep4() {
+    var p = document.getElementById('placedCard');
+    var c = document.getElementById('compareCard');
+    p.classList.remove('on'); c.classList.remove('on');
+    void p.offsetWidth;
+    at(200, function () { p.classList.add('on'); c.classList.add('on'); });
+  }
+
+  /* ---------- Navigation ---------- */
+  function setNav(n) {
+    stepnavBtns.forEach(function (b) {
+      var s = +b.dataset.step;
+      b.classList.toggle('active', s === n);
+      b.classList.toggle('done', s < n);
+      b.querySelector('.num').textContent = (s < n) ? '✓' : s;
+    });
+    backBtn.style.visibility = (n === 1) ? 'hidden' : 'visible';
+    nextBtn.textContent = (n === 4) ? 'Finish ▸' : 'Next →';
+  }
+
+  function goStep(n, opts) {
+    opts = opts || {};
+    clearTimers();
+    current = n;
+    [1, 2, 3, 4].forEach(function (i) {
+      document.getElementById('view' + i).hidden = (i !== n);
+    });
+    setNav(n);
+    if (n === 1) runStep1();
+    if (n === 2) runStep2();
+    if (n === 3) runStep3(!!opts.autobook);
+    if (n === 4) runStep4();
+  }
+
+  function showApp() {
+    splash.hidden = true;
+    endframe.hidden = true;
+    app.hidden = false;
+  }
+
+  function showEnd() {
+    clearTimers();
+    app.hidden = true;
+    splash.hidden = true;
+    caption.hidden = true;
+    videoMode = false;
+    endframe.hidden = false;
+  }
+
+  /* ---------- Video mode ---------- */
+  var CAPTIONS = {
+    1: { day: 'Day 0',     text: 'Define the role once — a 30-minute chat builds full role intelligence.', dur: 15500 },
+    2: { day: 'Hours',     text: "Traast's engine sources, ranks, and qualifies. Zero work on your side.",  dur: 11000 },
+    3: { day: 'Day 1–3',   text: 'Five pre-vetted candidates — interview slots land on your calendar.',     dur: 12000 },
+    4: { day: 'Day 19',    text: 'Placement. You pay $500/month — only while the hire stays.',              dur: 9500 }
+  };
+
+  function setCaption(n) {
+    var c = CAPTIONS[n];
+    document.getElementById('capDay').textContent = c.day;
+    document.getElementById('capText').textContent = c.text;
+    var prog = document.getElementById('capProg');
+    prog.style.animation = 'none';
+    void prog.offsetWidth;
+    prog.style.animation = 'capgrow ' + c.dur + 'ms linear both';
+  }
+
+  function startVideo() {
+    stopVideo();
+    videoMode = true;
+    showApp();
+    caption.hidden = false;
+    var tAcc = 0;
+    [1, 2, 3, 4].forEach(function (n) {
+      vAt(tAcc, function () {
+        goStep(n, { autobook: n === 3 });
+        setCaption(n);
+      });
+      tAcc += CAPTIONS[n].dur;
+    });
+    vAt(tAcc, showEnd);
+  }
+
+  function stopVideo() {
+    clearVTimers();
+    videoMode = false;
+    caption.hidden = true;
+  }
+
+  /* ---------- Wiring ---------- */
+  document.getElementById('playBtn').addEventListener('click', startVideo);
+  document.getElementById('replayBtn').addEventListener('click', startVideo);
+  document.getElementById('exploreBtn').addEventListener('click', function () {
+    stopVideo(); showApp(); goStep(1);
+  });
+  document.getElementById('backToDemoBtn').addEventListener('click', function () {
+    stopVideo(); showApp(); goStep(1);
+  });
+  document.getElementById('exitVideo').addEventListener('click', function () {
+    stopVideo();
+  });
+
+  nextBtn.addEventListener('click', function () {
+    stopVideo();
+    if (current >= 4) showEnd(); else goStep(current + 1);
+  });
+  backBtn.addEventListener('click', function () {
+    stopVideo();
+    if (current > 1) goStep(current - 1);
+  });
+  stepnavBtns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      stopVideo();
+      goStep(+b.dataset.step);
+    });
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && videoMode) { stopVideo(); return; }
+    if (app.hidden) return;
+    if (e.key === 'ArrowRight' && current < 4) { stopVideo(); goStep(current + 1); }
+    if (e.key === 'ArrowLeft' && current > 1) { stopVideo(); goStep(current - 1); }
+  });
+})();
+</script>
+
+</body>
+</html>
