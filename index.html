@@ -255,7 +255,7 @@
     gap: 26px;
     align-items: start;
   }
-  .chat { display: flex; flex-direction: column; height: 420px; }
+  .chat { display: flex; flex-direction: column; height: 460px; }
   .chat-head {
     display: flex; align-items: center; gap: 9px;
     padding: 16px 20px;
@@ -482,7 +482,7 @@
     font-size: 12.5px;
     font-weight: 700;
     flex: none;
-    width: 128px;
+    width: 158px;
     transition: background .15s ease;
   }
   .bookbtn:hover { background: var(--blue-soft); }
@@ -751,7 +751,7 @@
             <div class="field" data-f="skills"><div class="k">Must-have skills</div><div class="v"><span class="skeleton"></span></div></div>
             <div class="field" data-f="comp"><div class="k">Compensation</div><div class="v"><span class="skeleton"></span></div></div>
             <div class="field" data-f="loc"><div class="k">Location</div><div class="v"><span class="skeleton"></span></div></div>
-            <div class="field" data-f="sig"><div class="k">Engagement filter</div><div class="v"><span class="skeleton"></span></div></div>
+            <div class="field" data-f="sig"><div class="k">Search calibration</div><div class="v"><span class="skeleton"></span></div></div>
           </div>
         </div>
       </section>
@@ -821,11 +821,12 @@
           <p>Five pre-vetted, engaged candidates with interview slots held on your calendar — one click to confirm.</p>
         </div>
         <div class="card calstrip">
-          <span class="cal-k"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4m8-4v4M3 11h18"/></svg>Proposed slots</span>
-          <span class="slot" id="slotA">Thu 10:00</span>
-          <span class="slot" id="slotB">Thu 13:30</span>
-          <span class="slot" id="slotC">Fri 09:00</span>
-          <span class="slot">Fri 14:00</span>
+          <span class="cal-k"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4m8-4v4M3 11h18"/></svg>Held slots · one per candidate</span>
+          <span class="slot" id="slot0">Thu 10:00</span>
+          <span class="slot" id="slot1">Thu 13:30</span>
+          <span class="slot" id="slot2">Fri 09:00</span>
+          <span class="slot" id="slot3">Fri 14:00</span>
+          <span class="slot" id="slot4">Mon 11:00</span>
         </div>
         <div class="slate" id="slate"></div>
       </section>
@@ -944,20 +945,28 @@
   /* ---------- Step 1: chat ---------- */
   var CHAT = [
     { who: 'agent', text: "Welcome back, Alex 👋 What role are we opening today?", fill: [] },
-    { who: 'user',  text: "Similar to the last hire but I want someone abit more senior", fill: ['role', 'level'] },
-    { who: 'agent', text: "Got it. Are you willing to increase the compensation by 25% to find the talent you're really looking for?", fill: ['skills', 'loc'] },
-    { who: 'user',  text: "Yes, if that what it takes sure !!", fill: ['comp'] },
-    { who: 'agent', text: "Great, Traast will start the search within the next 60 seconds, hold tight.", fill: ['sig'] },
+    { who: 'user',  text: "Founding Backend Engineer — our first senior infra hire.", fill: ['role'] },
+    { who: 'agent', text: "First hire means no one here to ramp them. I'll weight self-direction high. What should they own?", fill: [] },
+    { who: 'user',  text: "Python + AWS, strong distributed systems. They'll own our infra end-to-end.", fill: ['skills'] },
+    { who: 'agent', text: "“Own it end-to-end” reads as Staff scope, not Senior. Should I calibrate up?", fill: [] },
+    { who: 'user',  text: "Yeah — Staff is fair. They're setting the foundation.", fill: ['level'] },
+    { who: 'agent', text: "Got it. Compensation range and location?", fill: [] },
+    { who: 'user',  text: "$170–210K plus equity. Austin, hybrid — 3 days on-site.", fill: ['comp', 'loc'] },
+    { who: 'agent', text: "That band sits about 15% under Austin Staff infra. Is equity meant to close the gap?", fill: [] },
+    { who: 'user',  text: "Equity's generous — 0.5–2%.", fill: [] },
+    { who: 'agent', text: "Noted. And three days on-site roughly halves your active pool. Worth holding the line?", fill: [] },
+    { who: 'user',  text: "Hold it. Culture matters early.", fill: [] },
+    { who: 'agent', text: "Locked in — Staff-level, self-directed, comp-aware, Austin-anchored. One conversation, full role intelligence. Building your search now.", fill: ['sig'] },
     { who: 'system', text: "Role brief confirmed ✓", fill: [] }
   ];
 
   var INTEL = {
     role:   'Founding Backend Engineer',
-    level:  'Senior / Staff',
+    level:  'Staff (calibrated up)',
     skills: '<span class="chip">Python</span><span class="chip">AWS</span><span class="chip">Distributed systems</span>',
-    comp:   '$210–260K + equity (+25%)',
-    loc:    'Austin, TX · Hybrid',
-    sig:    'Active signals, last 30 days'
+    comp:   '$170–210K + 0.5–2% equity',
+    loc:    'Austin, TX · Hybrid (3 days)',
+    sig:    'Self-directed · comp-aware',
   };
   var INTEL_TOTAL = 6;
 
@@ -1054,13 +1063,13 @@
 
   /* ---------- Step 3: slate ---------- */
   var CANDS = [
-    { name: 'Jordan Reyes',    who: 'Staff Engineer · Nexbase',            match: 96, av: '#2563EB', sig: ['Python · AWS ✓', 'Replied in 2h', 'Open to move'] },
-    { name: 'Priya Raghavan',  who: 'Senior Backend Eng · Cloudline',      match: 93, av: '#06B6D4', sig: ['Distributed systems ✓', 'Salary fit', 'Replied in 4h'] },
-    { name: 'Tom Becker',      who: 'Founding Engineer (prev) · Loopwell', match: 91, av: '#6366F1', sig: ['0→1 experience', 'Austin local', 'Open to move'] },
-    { name: 'Emily Kang',      who: 'Senior SWE · Datashore',              match: 89, av: '#0D1B2A', sig: ['Python · AWS ✓', 'Salary fit'] },
-    { name: 'Marcus Webb',     who: 'Backend Engineer · Ferrostack',       match: 86, av: '#2563EB', sig: ['Infra ownership ✓', 'Replied in 6h'] }
+    { name: 'Jordan Reyes',    who: 'Staff Engineer · Nexbase',            match: 96, av: '#2563EB', sig: ['Staff scope ✓', 'Self-directed ✓', 'Replied in 2h'] },
+    { name: 'Priya Raghavan',  who: 'Senior Backend Eng · Cloudline',      match: 93, av: '#06B6D4', sig: ['Distributed systems ✓', 'Equity-motivated', 'Replied in 4h'] },
+    { name: 'Tom Becker',      who: 'Founding Engineer (prev) · Loopwell', match: 91, av: '#6366F1', sig: ['0→1 self-direction ✓', 'Austin local', 'OK with 3 days on-site'] },
+    { name: 'Emily Kang',      who: 'Senior SWE · Datashore',              match: 89, av: '#0D1B2A', sig: ['Python · AWS ✓', 'Staff-ready', 'Equity-motivated'] },
+    { name: 'Marcus Webb',     who: 'Backend Engineer · Ferrostack',       match: 86, av: '#2563EB', sig: ['Infra ownership ✓', 'Comp fits band', 'Replied in 6h'] }
   ];
-  var SLOTS = ['Thu 10:00', 'Thu 13:30', 'Fri 09:00'];
+  var SLOTS = ['Thu 10:00', 'Thu 13:30', 'Fri 09:00', 'Fri 14:00', 'Mon 11:00'];
 
   function initials(name) {
     return name.split(' ').map(function (w) { return w[0]; }).join('');
@@ -1079,7 +1088,7 @@
           return '<span class="sigchip' + (j === 0 ? ' hot' : '') + '">' + s + '</span>';
         }).join('') + '</span>' +
         '<span class="match"><b>' + c.match + '%</b><span>match</span></span>' +
-        '<button class="bookbtn" data-i="' + i + '">Confirm slot</button>';
+        '<button class="bookbtn" data-i="' + i + '">Confirm ' + SLOTS[i] + '</button>';
       slate.appendChild(row);
     });
     slate.addEventListener('click', function (e) {
@@ -1088,24 +1097,20 @@
     });
   }
 
-  var bookedCount = 0;
+  /* Each candidate holds their own slot: confirming candidate i claims slot i */
   function book(i) {
     var btns = document.querySelectorAll('#slate .bookbtn');
     var btn = btns[i];
     if (!btn || btn.classList.contains('booked')) return;
-    var slot = SLOTS[Math.min(bookedCount, SLOTS.length - 1)];
     btn.classList.add('booked');
-    btn.textContent = '✓ ' + slot;
-    var slotEls = [document.getElementById('slotA'), document.getElementById('slotB'), document.getElementById('slotC')];
-    if (slotEls[bookedCount]) slotEls[bookedCount].classList.add('booked');
-    bookedCount++;
+    btn.textContent = '✓ ' + SLOTS[i];
+    document.getElementById('slot' + i).classList.add('booked');
   }
 
   function runStep3(autobook) {
-    bookedCount = 0;
     buildSlate();
-    ['slotA', 'slotB', 'slotC'].forEach(function (id) {
-      document.getElementById(id).classList.remove('booked');
+    SLOTS.forEach(function (_, i) {
+      document.getElementById('slot' + i).classList.remove('booked');
     });
     var rows = document.querySelectorAll('#slate .cand');
     Array.prototype.forEach.call(rows, function (r, i) {
@@ -1169,7 +1174,7 @@
 
   /* ---------- Video mode ---------- */
   var CAPTIONS = {
-    1: { day: 'Day 0',     text: 'Define the role once — a 30-minute chat builds full role intelligence.', dur: 21500 },
+    1: { day: 'Day 0',     text: 'Define the role once — a 30-minute chat builds full role intelligence.', dur: 47500 },
     2: { day: 'Hours',     text: 'Behind the scenes, Traast orchestrates everything — zero work on your side.', dur: 12000 },
     3: { day: 'Day 1–3',   text: 'Five pre-vetted candidates — slots held on your calendar, one click to confirm.', dur: 12000 },
     4: { day: 'Day 19',    text: 'Placement. You pay $200–500/month — only while the hire stays.',          dur: 9500 }
