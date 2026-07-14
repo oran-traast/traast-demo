@@ -193,7 +193,7 @@
     border-radius: 0 2px 2px 0;
     pointer-events: none;
   }
-  /* Time chip riding the progress tip: the journey clock (Day 0 → +8h → Day 19) */
+  /* Time chip riding the progress tip: the journey clock (Day 0 → +8h → Day 7) */
   .navtip-track {
     position: absolute;
     left: 44px;
@@ -205,21 +205,34 @@
   .navtip {
     position: absolute;
     left: 0%;
-    bottom: -8px;
+    bottom: -11px;
     transform: translate(-50%, 100%);
-    background: var(--blue);
-    color: #fff;
+    background: #fff;
+    color: var(--navy);
     font-style: normal;
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    padding: 3px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .01em;
+    padding: 4px 12px;
+    border: 1px solid var(--line);
     border-radius: 999px;
     white-space: nowrap;
-    box-shadow: 0 4px 12px rgba(37,99,235,.35);
+    box-shadow: 0 6px 18px rgba(15,23,42,.10);
     z-index: 6;
     font-variant-numeric: tabular-nums;
+  }
+  /* Caret tying the chip to the progress line it measures */
+  .navtip::before {
+    content: "";
+    position: absolute;
+    top: -4px;
+    left: 50%;
+    width: 7px;
+    height: 7px;
+    background: #fff;
+    border-left: 1px solid var(--line);
+    border-top: 1px solid var(--line);
+    transform: translateX(-50%) rotate(45deg);
   }
   .stepnav button {
     flex: 1;
@@ -751,7 +764,7 @@
       box-shadow: 0 10px 34px rgba(15,23,42,.14);
       z-index: 50;
     }
-    .navtip { font-size: 9px; padding: 2px 8px; }
+    .navtip { font-size: 10px; padding: 3px 9px; }
     .navtip-track { left: 30px; right: 30px; }
     /* Reserve room above the fixed caption so it never permanently covers content */
     body.video-on { padding-bottom: 110px; }
@@ -933,7 +946,7 @@
       <!-- STEP 4 -->
       <section class="view" id="view4" hidden>
         <div class="view-head">
-          <span class="daytag">Day 19</span>
+          <span class="daytag">Day 7</span>
           <h2>Placement made — and you only pay while it lasts</h2>
           <p>Success-based, monthly, cash-flow-friendly. No upfront agency fee.</p>
         </div>
@@ -941,11 +954,11 @@
           <div class="card placed" id="placedCard">
             <div class="bigcheck"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
             <h3>Jordan Reyes signed — Founding Backend Engineer</h3>
-            <p>Offer accepted on day 19. Traast verifies ongoing employment automatically.</p>
+            <p>Offer accepted on day 7. Traast verifies ongoing employment automatically.</p>
             <div class="timeline">
               <span class="tl-dot"><i></i>Day 0 · role defined</span>
               <span class="tl-dot"><i></i>Day 2 · first interview</span>
-              <span class="tl-dot"><i></i>Day 19 · offer signed</span>
+              <span class="tl-dot"><i></i>Day 7 · offer signed</span>
             </div>
           </div>
           <div class="card compare" id="compareCard">
@@ -1074,14 +1087,24 @@
   var navProg = document.getElementById('navProg');
   var navTip = document.getElementById('navTip');
 
-  var TIP_LABELS = { 1: 'Day 0', 2: 'Hours', 3: 'Day 1–3', 4: 'Day 19' };
-  /* Video mode: the chip is the journey clock — it counts elapsed time
-     through each scene (hours during the engine, days after) */
-  var TIP_ANIM = {
-    1: null,
-    2: { from: 1, to: 8,  fmt: function (v) { return '+' + v + 'h'; } },
-    3: { from: 1, to: 3,  fmt: function (v) { return 'Day ' + v; } },
-    4: { from: 3, to: 19, fmt: function (v) { return 'Day ' + v; } }
+  var TIP_LABELS = { 1: 'Day 0 · 30 min', 2: 'A few hours', 3: 'Day 1–3', 4: 'Day 7' };
+  /* Video mode: the chip is event-locked — it only ticks when something
+     visible justifies it. Scene 2 ticks as each pipeline stage lights up
+     (300 + i*850, mirroring runStep2); scene 3 ticks as each day's
+     candidates land (mirroring runStep3's day-paced arrivals). */
+  var TIP_EVENTS = {
+    1: [{ t: 0, label: 'Day 0 · 30 min' }],
+    2: [
+      { t: 300,  label: '+1h' }, { t: 1360, label: '+2h' },
+      { t: 2420, label: '+4h' }, { t: 3480, label: '+5h' },
+      { t: 4540, label: '+7h' }, { t: 5600, label: '+8h' }
+    ],
+    3: [
+      { t: 400,  label: 'Day 1' },
+      { t: 4600, label: 'Day 2' },
+      { t: 8800, label: 'Day 3' }
+    ],
+    4: [{ t: 200, label: 'Day 7' }]
   };
 
   function navProgTo(pct, ms, timing) {
@@ -1102,16 +1125,9 @@
     navTip.style.left = ((n - 1) * 25) + '%';
     void navProg.offsetWidth;
     navProgTo(n * 25, dur, 'linear');
-    var anim = TIP_ANIM[n];
-    if (!anim) { navTip.textContent = TIP_LABELS[n]; return; }
-    var span = anim.to - anim.from;
-    for (var v = anim.from; v <= anim.to; v++) {
-      (function (val) {
-        at(dur * (val - anim.from) / span, function () {
-          navTip.textContent = anim.fmt(val);
-        });
-      })(v);
-    }
+    TIP_EVENTS[n].forEach(function (ev) {
+      at(ev.t, function () { navTip.textContent = ev.label; });
+    });
   }
 
   /* ---------- Step 1: chat ---------- */
@@ -1179,7 +1195,7 @@
   function runStep1() {
     resetStep1();
     var body = document.getElementById('chatBody');
-    var tAcc = 800;
+    var tAcc = 500;
     CHAT.forEach(function (m) {
       var showTyping = (m.who === 'agent');
       if (showTyping) {
@@ -1193,7 +1209,7 @@
             body.scrollTop = body.scrollHeight;
           });
         })(tAcc);
-        tAcc += 1800;
+        tAcc += 1200;
       }
       (function (m2, start) {
         at(start, function () {
@@ -1207,7 +1223,7 @@
           fillIntel(m2.fill);
         });
       })(m, tAcc);
-      tAcc += (m.who === 'user') ? 2600 : 2200;
+      tAcc += (m.who === 'user') ? 1700 : 1500;
     });
     if (RM) { CHAT.forEach(function (m) { fillIntel(m.fill); }); }
   }
@@ -1236,12 +1252,12 @@
     loop.classList.remove('on');
     void loop.offsetWidth; /* restart CSS animations on re-entry */
     stages.forEach(function (s, i) {
-      at(300 + i * 850, function () {
+      at(300 + i * 1060, function () {
         s.classList.add('on');
-        countUp(s.querySelector('.count'), +s.querySelector('.count').dataset.target, 900);
+        countUp(s.querySelector('.count'), +s.querySelector('.count').dataset.target, 1125);
       });
     });
-    at(300 + stages.length * 850 + 300, function () { loop.classList.add('on'); });
+    at(300 + stages.length * 1060 + 300, function () { loop.classList.add('on'); });
   }
 
   /* ---------- Step 3: slate ---------- */
@@ -1296,12 +1312,20 @@
       document.getElementById('slot' + i).classList.remove('booked');
     });
     var rows = document.querySelectorAll('#slate .cand');
-    Array.prototype.forEach.call(rows, function (r, i) {
-      at(250 + i * 420, function () { r.classList.add('on'); });
-    });
     if (autobook) {
-      at(3400, function () { book(0); });
-      at(4600, function () { book(1); });
+      /* Video: candidates land day by day (2 / 2 / 1, matching the chip's
+         Day 1/2/3 ticks) and Alex confirms as they arrive */
+      var arrive = [400, 1000, 4600, 5200, 8800];
+      Array.prototype.forEach.call(rows, function (r, i) {
+        at(arrive[i], function () { r.classList.add('on'); });
+      });
+      at(2600, function () { book(0); });
+      at(6800, function () { book(1); });
+      at(10400, function () { book(2); });
+    } else {
+      Array.prototype.forEach.call(rows, function (r, i) {
+        at(250 + i * 420, function () { r.classList.add('on'); });
+      });
     }
   }
 
@@ -1366,10 +1390,10 @@
 
   /* ---------- Video mode ---------- */
   var CAPTIONS = {
-    1: { day: 'Day 0',     text: 'Define the role once — a 30-minute chat builds full role intelligence.', dur: 47500 },
+    1: { day: 'Day 0',     text: 'Define the role once — a 30-minute chat builds full role intelligence.', dur: 32500 },
     2: { day: 'Hours',     text: 'Behind the scenes, Traast orchestrates everything — zero work on your side.', dur: 12000 },
     3: { day: 'Day 1–3',   text: 'Five pre-vetted candidates — slots held on your calendar, one click to confirm.', dur: 12000 },
-    4: { day: 'Day 19',    text: 'Placement. You pay $200–500/month — only while the hire stays.',          dur: 9500 }
+    4: { day: 'Day 7',     text: 'Placement. You pay $200–500/month — only while the hire stays.',          dur: 9500 }
   };
 
   function setCaption(n) {
