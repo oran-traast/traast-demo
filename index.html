@@ -656,7 +656,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .navbtns, .footbar .exitbtn { flex: none; }
+  .navbtns, .videobtns { flex: none; }
   .navbtns { display: flex; gap: 8px; }
   .nextbtn {
     background: var(--blue);
@@ -681,6 +681,7 @@
   /* ---------- Narration bar (video mode swaps actions only) ---------- */
   #footText { color: var(--ink); }
   body.video-on .footbar .navbtns { display: none; }
+  .videobtns { display: flex; align-items: center; gap: 8px; }
   .exitbtn {
     background: #F3F4F6;
     border: 1px solid var(--line);
@@ -689,6 +690,19 @@
     padding: 6px 12px;
     font-size: 12px;
     font-weight: 600;
+  }
+  .pausebtn {
+    background: var(--card);
+    border: 1px solid var(--blue);
+    color: var(--blue);
+    border-radius: 7px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    min-width: 84px;
+  }
+  .pausebtn[aria-pressed="true"] {
+    background: var(--blue-soft);
   }
 
   /* ---------- End frame ---------- */
@@ -973,7 +987,10 @@
         <button class="backbtn" id="backBtn">← Back</button>
         <button class="nextbtn" id="nextBtn">Next →</button>
       </div>
-      <button class="exitbtn" id="exitVideo" hidden>Exit ✕</button>
+      <div class="videobtns">
+        <button class="pausebtn" id="pauseVideo" hidden aria-pressed="false">❚❚ Pause</button>
+        <button class="exitbtn" id="exitVideo" hidden>Exit ✕</button>
+      </div>
     </div>
   </div>
 </div>
@@ -1005,13 +1022,41 @@
   var RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function d(ms) { return RM ? 0 : ms; }
 
+  /* Pausable timers: each entry remembers its remaining delay so
+     pauseEntryList/resumeEntryList can freeze and restart it precisely,
+     instead of losing track of "how much longer" when paused. */
+  function removeEntry(list, e) {
+    var i = list.indexOf(e);
+    if (i > -1) list.splice(i, 1);
+  }
+  function scheduleEntry(list, ms, fn) {
+    var e = { fn: fn, remaining: d(ms), id: null, startedAt: performance.now() };
+    e.id = setTimeout(function () { removeEntry(list, e); fn(); }, e.remaining);
+    list.push(e);
+    return e;
+  }
+  function pauseEntryList(list) {
+    var now = performance.now();
+    list.forEach(function (e) {
+      clearTimeout(e.id);
+      e.remaining = Math.max(0, e.remaining - (now - e.startedAt));
+    });
+  }
+  function resumeEntryList(list) {
+    var now = performance.now();
+    list.forEach(function (e) {
+      e.startedAt = now;
+      e.id = setTimeout(function () { removeEntry(list, e); e.fn(); }, e.remaining);
+    });
+  }
+
   var timers = [];
-  function at(ms, fn) { timers.push(setTimeout(fn, d(ms))); }
-  function clearTimers() { timers.forEach(clearTimeout); timers = []; }
+  function at(ms, fn) { return scheduleEntry(timers, ms, fn); }
+  function clearTimers() { timers.forEach(function (e) { clearTimeout(e.id); }); timers = []; }
 
   var vTimers = [];
-  function vAt(ms, fn) { vTimers.push(setTimeout(fn, d(ms))); }
-  function clearVTimers() { vTimers.forEach(clearTimeout); vTimers = []; }
+  function vAt(ms, fn) { return scheduleEntry(vTimers, ms, fn); }
+  function clearVTimers() { vTimers.forEach(function (e) { clearTimeout(e.id); }); vTimers = []; }
 
   var splash = document.getElementById('splash');
   var app = document.getElementById('app');
@@ -1022,6 +1067,7 @@
 
   var current = 0;
   var videoMode = false;
+  var videoPaused = false;
 
   /* ---------- Scale-to-fit: the whole demo always fits the viewport ---------- */
   var stage = document.getElementById('stage');
@@ -1084,16 +1130,46 @@
     navTip.style.left = pct + '%';
   }
 
-  /* Video mode: underline and chip crawl across the active step's quarter
-     over the scene's exact duration, while the chip label ticks */
-  function navProgVideo(n) {
-    var dur = CAPTIONS[n].dur;
+  /* Video mode: underline and chip crawl across the active step's quarter,
+     linear over the scene's exact duration. Tracked in progState so pause
+     can freeze it mid-flight and resume can continue from that exact point
+     rather than jumping or restarting. */
+  var progState = null;
+
+  function progRun(from, to, dur) {
+    progState = { from: from, to: to, dur: dur, startedAt: performance.now() };
     navProg.style.transition = 'none';
-    navProg.style.width = ((n - 1) * 25) + '%';
+    navProg.style.width = from + '%';
     navTip.style.transition = 'none';
-    navTip.style.left = ((n - 1) * 25) + '%';
+    navTip.style.left = from + '%';
     void navProg.offsetWidth;
-    navProgTo(n * 25, dur, 'linear');
+    var t = d(dur) + 'ms linear';
+    navProg.style.transition = 'width ' + t;
+    navProg.style.width = to + '%';
+    navTip.style.transition = 'left ' + t;
+    navTip.style.left = to + '%';
+  }
+
+  function progPause() {
+    if (!progState) return;
+    var elapsed = performance.now() - progState.startedAt;
+    var p = Math.min(1, elapsed / progState.dur);
+    var curPct = progState.from + (progState.to - progState.from) * p;
+    navProg.style.transition = 'none';
+    navProg.style.width = curPct + '%';
+    navTip.style.transition = 'none';
+    navTip.style.left = curPct + '%';
+    progState.from = curPct;
+    progState.dur = Math.max(0, progState.dur - elapsed);
+  }
+
+  function progResume() {
+    if (!progState || progState.dur <= 0) return;
+    progRun(progState.from, progState.to, progState.dur);
+  }
+
+  function navProgVideo(n) {
+    progRun((n - 1) * 25, n * 25, CAPTIONS[n].dur);
     TIP_EVENTS[n].forEach(function (ev) {
       at(ev.t, function () { navTip.textContent = ev.label; });
     });
@@ -1201,17 +1277,25 @@
   function countUp(el, target, dur) {
     if (RM) { el.textContent = target.toLocaleString('en-US'); return; }
     var t0 = performance.now();
+    var pausedSince = null, pausedTotal = 0;
     function frame(now) {
-      var p = Math.min(1, (now - t0) / dur);
+      if (videoPaused) {
+        if (pausedSince === null) pausedSince = now;
+        requestAnimationFrame(frame);
+        return;
+      }
+      if (pausedSince !== null) { pausedTotal += now - pausedSince; pausedSince = null; }
+      var p = Math.min(1, (now - t0 - pausedTotal) / dur);
       var eased = 1 - Math.pow(1 - p, 3);
       el.textContent = Math.round(target * eased).toLocaleString('en-US');
       if (p < 1) requestAnimationFrame(frame);
     }
     requestAnimationFrame(frame);
-    /* rAF is frozen in background tabs — guarantee the final value regardless */
-    timers.push(setTimeout(function () {
+    /* rAF is frozen in background tabs — guarantee the final value regardless.
+       Scheduled via at() so a pause defers this guarantee by the same amount. */
+    at(dur + 150, function () {
       el.textContent = target.toLocaleString('en-US');
-    }, dur + 150));
+    });
   }
 
   function runStep2() {
@@ -1353,6 +1437,7 @@
     app.hidden = true;
     splash.hidden = true;
     document.getElementById('exitVideo').hidden = true;
+    setPauseUI(false, true);
     document.body.classList.remove('video-on');
     videoMode = false;
     endframe.hidden = false;
@@ -1372,6 +1457,7 @@
     document.body.classList.add('video-on');
     showApp();
     document.getElementById('exitVideo').hidden = false;
+    setPauseUI(false, false);
     var tAcc = 0;
     [1, 2, 3, 4].forEach(function (n) {
       vAt(tAcc, function () {
@@ -1386,12 +1472,49 @@
   function stopVideo() {
     clearVTimers();
     videoMode = false;
+    videoPaused = false;
+    progState = null;
     document.body.classList.remove('video-on');
     document.getElementById('exitVideo').hidden = true;
+    setPauseUI(false, true);
     if (current >= 1) {
       navProgTo(current * 25, 300);
       navTip.textContent = TIP_LABELS[current];
     }
+  }
+
+  /* ---------- Pause / resume: freeze every clock the video drives (step
+     timers, scene-transition timer, the progress line + chip, and any
+     in-flight count-up animation) so a viewer can read something and
+     resume exactly where it left off — nothing skips or restarts. */
+  var pauseBtn = document.getElementById('pauseVideo');
+
+  function setPauseUI(paused, hide) {
+    pauseBtn.hidden = !!hide;
+    pauseBtn.textContent = paused ? '▶ Resume' : '❚❚ Pause';
+    pauseBtn.setAttribute('aria-pressed', paused ? 'true' : 'false');
+  }
+
+  function pauseVideo() {
+    if (!videoMode || videoPaused) return;
+    videoPaused = true;
+    pauseEntryList(timers);
+    pauseEntryList(vTimers);
+    progPause();
+    setPauseUI(true, false);
+  }
+
+  function resumeVideo() {
+    if (!videoMode || !videoPaused) return;
+    videoPaused = false;
+    resumeEntryList(timers);
+    resumeEntryList(vTimers);
+    progResume();
+    setPauseUI(false, false);
+  }
+
+  function togglePauseVideo() {
+    if (videoPaused) resumeVideo(); else pauseVideo();
   }
 
   /* ---------- Wiring ---------- */
@@ -1406,6 +1529,7 @@
   document.getElementById('exitVideo').addEventListener('click', function () {
     stopVideo();
   });
+  pauseBtn.addEventListener('click', togglePauseVideo);
 
   nextBtn.addEventListener('click', function () {
     stopVideo();
