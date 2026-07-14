@@ -592,6 +592,88 @@
     font-weight: 600;
   }
 
+  /* ---------- Journey rail ---------- */
+  #rail {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(720px, calc(100% - 32px));
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: rgba(255,255,255,.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 8px 22px;
+    z-index: 55;
+    box-shadow: 0 10px 34px rgba(15,23,42,.12);
+  }
+  .rail-actor {
+    flex: none;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .09em;
+    min-width: 52px;
+  }
+  .rail-actor.you { color: var(--blue); }
+  .rail-actor.traast { color: #0891B2; }
+  .rail-actor.neutral { color: var(--muted); }
+  .rail-track { position: relative; flex: 1; height: 44px; }
+  .rail-track::before {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; top: 12px;
+    height: 4px;
+    border-radius: 999px;
+    background: var(--line);
+  }
+  .rail-fill {
+    position: absolute;
+    left: 0; top: 12px;
+    height: 4px;
+    width: 0%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--blue), var(--cyan));
+  }
+  .rail-dot {
+    position: absolute;
+    top: 0;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 44px;
+    background: none;
+    border: 0;
+    padding: 0;
+  }
+  .rail-dot:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; border-radius: 8px; }
+  .rail-dot i {
+    display: block;
+    width: 14px; height: 14px;
+    margin: 7px auto 0;
+    border-radius: 50%;
+    background: var(--card);
+    border: 2px solid #D1D5DB;
+    transition: background .3s ease, border-color .3s ease;
+  }
+  .rail-dot.done i { background: var(--good); border-color: var(--good); }
+  .rail-dot.active i { background: var(--blue); border-color: var(--blue); box-shadow: 0 0 0 4px rgba(37,99,235,.18); }
+  .rail-dot .rail-day {
+    display: block;
+    margin-top: 6px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .rail-dot.active .rail-day { color: var(--blue); }
+  body.rail-on { padding-top: 104px; }
+
   /* ---------- Video captions ---------- */
   #caption {
     position: fixed;
@@ -629,14 +711,6 @@
     font-size: 12px;
     font-weight: 600;
   }
-  #caption .progress {
-    position: absolute;
-    left: 0; bottom: 0;
-    height: 3px;
-    background: var(--blue);
-    border-radius: 0 0 0 12px;
-    width: 0%;
-  }
 
   /* ---------- End frame ---------- */
   #endframe {
@@ -669,7 +743,6 @@
     100% { box-shadow: 0 0 0 0 rgba(5,150,105,0); }
   }
   @keyframes spin { to { transform: rotate(360deg); } }
-  @keyframes capgrow { from { width: 0%; } to { width: 100%; } }
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .01s !important; transition-duration: .01s !important; }
@@ -690,6 +763,10 @@
     #splash .wordmark { font-size: 22px; }
     #splash .tagline { font-size: 30px; }
     .views { padding: 14px; min-height: 0; }
+    #rail { gap: 10px; padding: 8px 16px; top: 10px; width: calc(100% - 20px); }
+    .rail-actor { font-size: 10px; min-width: 44px; }
+    .rail-dot .rail-day { font-size: 9px; letter-spacing: .03em; }
+    body.rail-on { padding-top: 88px; }
   }
 </style>
 
@@ -711,6 +788,18 @@
     <button class="btn btn-ghost" id="exploreBtn">Explore step by step</button>
   </div>
   <div class="fineprint">Follow Alex's journey — CTO of an AppSec start-up in Austin, TX.</div>
+</div>
+
+<!-- ================= JOURNEY RAIL ================= -->
+<div id="rail" hidden>
+  <span class="rail-actor you" id="railActor">Alex</span>
+  <div class="rail-track">
+    <i class="rail-fill" id="railFill"></i>
+    <button class="rail-dot" data-step="1" style="left:0%"  aria-label="Define the role — Day 0"><i></i><span class="rail-day">Day 0</span></button>
+    <button class="rail-dot" data-step="2" style="left:30%" aria-label="Traast engine — hours later"><i></i><span class="rail-day">Hours</span></button>
+    <button class="rail-dot" data-step="3" style="left:60%" aria-label="Interviews booked — day 1 to 3"><i></i><span class="rail-day">Day 1–3</span></button>
+    <button class="rail-dot" data-step="4" style="left:90%" aria-label="Placement — day 19"><i></i><span class="rail-day">Day 19</span></button>
+  </div>
 </div>
 
 <!-- ================= APP ================= -->
@@ -895,7 +984,6 @@
   <span class="cap-day" id="capDay">Day 0</span>
   <span class="cap-text" id="capText"></span>
   <button class="exitbtn" id="exitVideo">Exit ✕</button>
-  <span class="progress" id="capProg"></span>
 </div>
 
 <!-- ================= END FRAME ================= -->
@@ -941,6 +1029,45 @@
 
   var current = 0;
   var videoMode = false;
+
+  /* ---------- Journey rail ---------- */
+  var rail = document.getElementById('rail');
+  var railFill = document.getElementById('railFill');
+  var railActor = document.getElementById('railActor');
+  var railDots = Array.prototype.slice.call(document.querySelectorAll('.rail-dot'));
+  /* Dots mark where each scene STARTS; the last 10% is the arrival beat, so the
+     fill only reaches a milestone when its scene begins */
+  var RAIL_PCT = { 1: 0, 2: 30, 3: 60, 4: 90 };
+  var RAIL_END = { 1: 30, 2: 60, 3: 90, 4: 100 };
+  var ACTORS = {
+    1: { label: 'Alex',    cls: 'you' },
+    2: { label: 'Traast',  cls: 'traast' },
+    3: { label: 'Alex',    cls: 'you' },
+    4: { label: 'Day 19',  cls: 'neutral' }
+  };
+
+  function railFillTo(pct, ms, timing) {
+    railFill.style.transition = 'width ' + d(ms) + 'ms ' + (timing || 'ease');
+    railFill.style.width = pct + '%';
+  }
+
+  function setRail(n) {
+    railDots.forEach(function (dot) {
+      var s = +dot.dataset.step;
+      dot.classList.toggle('active', s === n);
+      dot.classList.toggle('done', s < n);
+    });
+    railActor.textContent = ACTORS[n].label;
+    railActor.className = 'rail-actor ' + ACTORS[n].cls;
+  }
+
+  /* Video mode: fill crawls from this scene's dot to the next over the scene's duration */
+  function railVideoFill(n) {
+    railFill.style.transition = 'none';
+    railFill.style.width = RAIL_PCT[n] + '%';
+    void railFill.offsetWidth;
+    railFillTo(RAIL_END[n], CAPTIONS[n].dur, 'linear');
+  }
 
   /* ---------- Step 1: chat ---------- */
   var CHAT = [
@@ -1151,6 +1278,8 @@
       document.getElementById('view' + i).hidden = (i !== n);
     });
     setNav(n);
+    setRail(n);
+    if (!videoMode) railFillTo(RAIL_PCT[n], 400);
     if (n === 1) runStep1();
     if (n === 2) runStep2();
     if (n === 3) runStep3(!!opts.autobook);
@@ -1161,6 +1290,8 @@
     splash.hidden = true;
     endframe.hidden = true;
     app.hidden = false;
+    rail.hidden = false;
+    document.body.classList.add('rail-on');
   }
 
   function showEnd() {
@@ -1168,6 +1299,8 @@
     app.hidden = true;
     splash.hidden = true;
     caption.hidden = true;
+    rail.hidden = true;
+    document.body.classList.remove('rail-on');
     videoMode = false;
     endframe.hidden = false;
   }
@@ -1184,10 +1317,6 @@
     var c = CAPTIONS[n];
     document.getElementById('capDay').textContent = c.day;
     document.getElementById('capText').textContent = c.text;
-    var prog = document.getElementById('capProg');
-    prog.style.animation = 'none';
-    void prog.offsetWidth;
-    prog.style.animation = 'capgrow ' + c.dur + 'ms linear both';
   }
 
   function startVideo() {
@@ -1200,6 +1329,7 @@
       vAt(tAcc, function () {
         goStep(n, { autobook: n === 3 });
         setCaption(n);
+        railVideoFill(n);
       });
       tAcc += CAPTIONS[n].dur;
     });
@@ -1210,6 +1340,7 @@
     clearVTimers();
     videoMode = false;
     caption.hidden = true;
+    if (current >= 1) railFillTo(RAIL_PCT[current], 300);
   }
 
   /* ---------- Wiring ---------- */
@@ -1237,6 +1368,12 @@
     b.addEventListener('click', function () {
       stopVideo();
       goStep(+b.dataset.step);
+    });
+  });
+  railDots.forEach(function (dot) {
+    dot.addEventListener('click', function () {
+      stopVideo();
+      goStep(+dot.dataset.step);
     });
   });
 
