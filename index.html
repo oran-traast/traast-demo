@@ -646,7 +646,17 @@
     border-top: 1px solid var(--line);
     background: var(--card);
   }
-  .footbar .note { font-size: 11.5px; color: var(--muted); }
+  .footbar .note {
+    font-size: 12.5px;
+    color: var(--muted);
+    flex: 1;
+    min-width: 0;
+    padding-right: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .navbtns, .footbar .exitbtn { flex: none; }
   .navbtns { display: flex; gap: 8px; }
   .nextbtn {
     background: var(--blue);
@@ -668,30 +678,10 @@
   }
 
 
-  /* ---------- Video captions ---------- */
-  /* Video narration docks into the footbar — Back/Next are meaningless while
-     the video drives itself, and this way narration costs zero extra height */
-  #caption {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    min-width: 0;
-    color: var(--ink);
-  }
-  body.video-on .footbar .note,
+  /* ---------- Narration bar (video mode swaps actions only) ---------- */
+  #footText { color: var(--ink); }
   body.video-on .footbar .navbtns { display: none; }
-  #caption .cap-day {
-    flex: none;
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: .09em;
-    color: var(--blue);
-    text-transform: uppercase;
-  }
-  #caption .cap-text { font-size: 14.5px; flex: 1; }
-  #caption .exitbtn {
-    flex: none;
+  .exitbtn {
     background: #F3F4F6;
     border: 1px solid var(--line);
     color: var(--muted);
@@ -750,24 +740,8 @@
       overflow: visible;
     }
     #stage { width: 100%; }
-    /* On phones the footbar can be scrolled away — pin the narration instead */
-    #caption {
-      position: fixed;
-      left: 50%;
-      bottom: 16px;
-      transform: translateX(-50%);
-      width: min(860px, calc(100% - 24px));
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 12px 16px;
-      box-shadow: 0 10px 34px rgba(15,23,42,.14);
-      z-index: 50;
-    }
     .navtip { font-size: 10px; padding: 3px 9px; }
     .navtip-track { left: 30px; right: 30px; }
-    /* Reserve room above the fixed caption so it never permanently covers content */
-    body.video-on { padding-bottom: 110px; }
     .intake-grid, .place-grid, .cmp-cols { grid-template-columns: 1fr; }
     .chat { height: 330px; }
     .pipe { grid-template-columns: repeat(2, 1fr); }
@@ -791,7 +765,6 @@
       padding: 12px 16px;
       box-shadow: 0 8px 24px rgba(15,23,42,.14);
     }
-    body.video-on .intel-mini { bottom: 96px; }
   }
 </style>
 
@@ -872,7 +845,7 @@
       <section class="view" id="view2" hidden>
         <div class="view-head">
           <span class="daytag">A few hours later</span>
-          <h2>Behind the scenes: Traast orchestrated everything automatically</h2>
+          <h2>Behind the scenes: Traast orchestrates everything automatically</h2>
           <p>Sourcing, scoring and ranking, outreach, qualification, scheduling — zero work on your side.</p>
           <div class="autobadge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.001a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.001a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Fully automated — this is Traast's side of the journey, not yours</div>
         </div>
@@ -929,7 +902,7 @@
       <section class="view" id="view3" hidden>
         <div class="view-head">
           <span class="daytag">Day 1–3</span>
-          <h2>Your slate is ready — interviews, not resumes</h2>
+          <h2>Your new hire is waiting — interviews, not resumes</h2>
           <p>Five pre-vetted, engaged candidates with interview slots held on your calendar — one click to confirm.</p>
         </div>
         <div class="card calstrip">
@@ -992,18 +965,15 @@
 
     </div>
 
+    <!-- One permanent bar: narration always on the left, only the actions
+         change between explore (Back/Next) and video (Exit) -->
     <div class="footbar">
-      <span class="note">Traast product demo · illustrative data</span>
+      <span class="note">Traast product demo<span id="footText"></span></span>
       <div class="navbtns">
         <button class="backbtn" id="backBtn">← Back</button>
         <button class="nextbtn" id="nextBtn">Next →</button>
       </div>
-      <!-- Video narration docks here in place of Back/Next -->
-      <div id="caption" hidden>
-        <span class="cap-day" id="capDay">Day 0</span>
-        <span class="cap-text" id="capText"></span>
-        <button class="exitbtn" id="exitVideo">Exit ✕</button>
-      </div>
+      <button class="exitbtn" id="exitVideo" hidden>Exit ✕</button>
     </div>
   </div>
 </div>
@@ -1045,7 +1015,6 @@
 
   var splash = document.getElementById('splash');
   var app = document.getElementById('app');
-  var caption = document.getElementById('caption');
   var endframe = document.getElementById('endframe');
   var nextBtn = document.getElementById('nextBtn');
   var backBtn = document.getElementById('backBtn');
@@ -1358,6 +1327,7 @@
       document.getElementById('view' + i).hidden = (i !== n);
     });
     setNav(n);
+    document.getElementById('footText').textContent = ' · ' + CAPTIONS[n].text;
     if (!videoMode) {
       navProgTo(n * 25, 400);
       navTip.textContent = TIP_LABELS[n];
@@ -1382,7 +1352,7 @@
     clearTimers();
     app.hidden = true;
     splash.hidden = true;
-    caption.hidden = true;
+    document.getElementById('exitVideo').hidden = true;
     document.body.classList.remove('video-on');
     videoMode = false;
     endframe.hidden = false;
@@ -1396,23 +1366,16 @@
     4: { day: 'Day 7',     text: 'Placement. You pay $200–500/month — only while the hire stays.',          dur: 9500 }
   };
 
-  function setCaption(n) {
-    var c = CAPTIONS[n];
-    document.getElementById('capDay').textContent = c.day;
-    document.getElementById('capText').textContent = c.text;
-  }
-
   function startVideo() {
     stopVideo();
     videoMode = true;
     document.body.classList.add('video-on');
     showApp();
-    caption.hidden = false;
+    document.getElementById('exitVideo').hidden = false;
     var tAcc = 0;
     [1, 2, 3, 4].forEach(function (n) {
       vAt(tAcc, function () {
         goStep(n, { autobook: n === 3 });
-        setCaption(n);
         navProgVideo(n);
       });
       tAcc += CAPTIONS[n].dur;
@@ -1424,7 +1387,7 @@
     clearVTimers();
     videoMode = false;
     document.body.classList.remove('video-on');
-    caption.hidden = true;
+    document.getElementById('exitVideo').hidden = true;
     if (current >= 1) {
       navProgTo(current * 25, 300);
       navTip.textContent = TIP_LABELS[current];
