@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-<title>Traast — Product Demo</title>
+<title>Traast - Product Demo</title>
 
 <style>
   :root {
@@ -102,6 +102,15 @@
     border-radius: 12px;
     padding: 22px 30px;
     min-width: 180px;
+  }
+  .stat-label {
+    display: block;
+    font-style: normal;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--blue);
+    letter-spacing: .02em;
+    margin-bottom: 6px;
   }
   .stat b {
     display: block;
@@ -790,16 +799,16 @@
   <div class="sub">A software-driven recruiting service that delivers qualified interviews within days.</div>
 
   <div class="statrow">
-    <div class="stat"><b>1–3 <span class="accent">days</span></b><span>to first interview</span></div>
-    <div class="stat"><b>5</b><span>pre-vetted candidates</span></div>
-    <div class="stat"><b>30<span class="accent">×</span></b><span>cheaper than agency fees</span></div>
+    <div class="stat"><i class="stat-label">Fast</i><b>1-3 <span class="accent">days</span></b><span>to first interview</span></div>
+    <div class="stat"><i class="stat-label">High Quality</i><b>5</b><span>pre-vetted candidates</span></div>
+    <div class="stat"><i class="stat-label">Fair By Design</i><b>30<span class="accent">×</span></b><span>cheaper than agency fees</span></div>
   </div>
 
   <div class="splash-actions">
     <button class="btn btn-primary" id="playBtn">▶&nbsp; Play demo</button>
     <button class="btn btn-ghost" id="exploreBtn">Explore step by step</button>
   </div>
-  <div class="fineprint">Follow Alex's journey — CTO of an AppSec start-up in Austin, TX.</div>
+  <div class="fineprint">Follow Alex's journey - CTO of an AppSec start-up in Austin, TX.</div>
 </div>
 
 <!-- ================= STAGE: the app window ================= -->
@@ -817,7 +826,7 @@
     <div class="stepnav" id="stepnav">
       <button data-step="1"><span class="num">1</span><span class="lbl"><b>Define the role</b><span><i class="actor you">Alex</i> · Day 0 · 30 min</span></span></button>
       <button data-step="2"><span class="num">2</span><span class="lbl"><b>Traast engine</b><span><i class="actor traast">Traast</i> · Automated</span></span></button>
-      <button data-step="3"><span class="num">3</span><span class="lbl"><b>Interviews booked</b><span><i class="actor you">Alex</i> · Day 1–3</span></span></button>
+      <button data-step="3"><span class="num">3</span><span class="lbl"><b>Interviews booked</b><span><i class="actor you">Alex</i> · Day 1-3</span></span></button>
       <button data-step="4"><span class="num">4</span><span class="lbl"><b>Placement</b><span>Success-based</span></span></button>
       <i class="navprog" id="navProg"></i>
       <span class="navtip-track"><i class="navtip" id="navTip">Day 0</i></span>
@@ -829,7 +838,7 @@
       <section class="view" id="view1" hidden>
         <div class="view-head">
           <span class="daytag">Day 0</span>
-          <h2>Define the role once — a quick chat, not a 3-week brief</h2>
+          <h2>Define the role once - a quick chat, not a 3-week brief</h2>
           <p>Traast's intake agent turns one conversation into structured role intelligence.</p>
         </div>
         <div class="intake-grid">
@@ -860,8 +869,8 @@
         <div class="view-head">
           <span class="daytag">A few hours later</span>
           <h2>Behind the scenes: Traast orchestrates everything automatically</h2>
-          <p>Sourcing, scoring and ranking, outreach, qualification, scheduling — zero work on your side.</p>
-          <div class="autobadge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.001a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.001a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Fully automated — this is Traast's side of the journey, not yours</div>
+          <p>Sourcing, scoring and ranking, outreach, qualification, scheduling - zero work on your side.</p>
+          <div class="autobadge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.001a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.001a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Fully automated - this is Traast's side of the journey, not yours</div>
         </div>
         <div class="pipe" id="pipe">
           <div class="card stage">
@@ -908,16 +917,16 @@
         </div>
         <div class="loopband" id="loopband">
           <span class="loopicon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg></span>
-          <span><b>Closed feedback loop:</b> every interview outcome flows back into ranking, screening, and outreach — every candidate makes the system smarter.</span>
+          <span><b>Closed feedback loop:</b> every interview outcome flows back into ranking, screening, and outreach - every candidate makes the system smarter.</span>
         </div>
       </section>
 
       <!-- STEP 3 -->
       <section class="view" id="view3" hidden>
         <div class="view-head">
-          <span class="daytag">Day 1–3</span>
-          <h2>Your new hire is waiting — interviews, not resumes</h2>
-          <p>Five pre-vetted, engaged candidates with interview slots held on your calendar — one click to confirm.</p>
+          <span class="daytag">Day 1-3</span>
+          <h2>Your new hire is waiting - interviews, not resumes</h2>
+          <p>Five pre-vetted, engaged candidates with interview slots held on your calendar - one click to confirm.</p>
         </div>
         <div class="card calstrip">
           <span class="cal-k"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4m8-4v4M3 11h18"/></svg>Held slots · one per candidate</span>
@@ -934,13 +943,13 @@
       <section class="view" id="view4" hidden>
         <div class="view-head">
           <span class="daytag">Day 7</span>
-          <h2>Placement made — you only pay while it lasts</h2>
+          <h2>Placement made - you only pay while it lasts</h2>
           <p>Success-based, monthly, cash-flow-friendly. No upfront agency fee.</p>
         </div>
         <div class="place-grid">
           <div class="card placed" id="placedCard">
             <div class="bigcheck"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
-            <h3>Jordan Reyes signed — Founding Backend Engineer</h3>
+            <h3>Jordan Reyes signed - Founding Backend Engineer</h3>
             <p>Offer accepted on day 7. Traast verifies ongoing employment automatically.</p>
             <div class="timeline">
               <span class="tl-dot"><i></i>Day 0 · role defined</span>
@@ -953,7 +962,7 @@
             <div class="cmp-cols">
               <div class="cmp traast">
                 <div class="cmp-t">Traast</div>
-                <div class="cmp-price">$200–500/mo</div>
+                <div class="cmp-price">$200-500/mo</div>
                 <div class="cmp-sub">juniors: $200 · mid/seniors: $500</div>
                 <ul>
                   <li>Only while the employee stays</li>
@@ -972,7 +981,7 @@
                 </ul>
               </div>
             </div>
-            <div class="bigline">Up to <span class="accent">30× cheaper</span> — and optimized for fit by design.</div>
+            <div class="bigline">Up to <span class="accent">30× cheaper</span> - and optimized for fit by design.</div>
           </div>
         </div>
       </section>
@@ -1003,9 +1012,9 @@
     <div class="wordmark">traast<span class="dot">.</span></div>
     <div class="tagline">One chat in. Qualified interviews out.</div>
     <div class="statrow">
-      <div class="stat"><b>1–3 <span class="accent">days</span></b><span>to first interview</span></div>
-      <div class="stat"><b>5</b><span>pre-vetted candidates</span></div>
-      <div class="stat"><b>30<span class="accent">×</span></b><span>cheaper than agency fees</span></div>
+      <div class="stat"><i class="stat-label">Fast</i><b>1-3 <span class="accent">days</span></b><span>to first interview</span></div>
+      <div class="stat"><i class="stat-label">High Quality</i><b>5</b><span>pre-vetted candidates</span></div>
+      <div class="stat"><i class="stat-label">Fair By Design</i><b>30<span class="accent">×</span></b><span>cheaper than agency fees</span></div>
     </div>
     <div class="splash-actions">
       <button class="btn btn-primary" id="replayBtn">▶&nbsp; Replay</button>
@@ -1102,7 +1111,7 @@
   var navProg = document.getElementById('navProg');
   var navTip = document.getElementById('navTip');
 
-  var TIP_LABELS = { 1: 'Day 0 · 30 min', 2: 'A few hours', 3: 'Day 1–3', 4: 'Day 7' };
+  var TIP_LABELS = { 1: 'Day 0 · 30 min', 2: 'A few hours', 3: 'Day 1-3', 4: 'Day 7' };
   /* Video mode: the chip is event-locked — it only ticks when something
      visible justifies it. Scene 2 ticks as each pipeline stage lights up
      (300 + i*850, mirroring runStep2); scene 3 ticks as each day's
@@ -1178,18 +1187,18 @@
   /* ---------- Step 1: chat ---------- */
   var CHAT = [
     { who: 'agent', text: "Welcome back, Alex 👋 What role are we opening today?", fill: [] },
-    { who: 'user',  text: "Founding Backend Engineer — our first senior infra hire.", fill: ['role'] },
+    { who: 'user',  text: "Founding Backend Engineer - our first senior infra hire.", fill: ['role'] },
     { who: 'agent', text: "First hire means no one here to ramp them. I'll weight self-direction high. What should they own?", fill: [] },
     { who: 'user',  text: "Python + AWS, strong distributed systems. They'll own our infra end-to-end.", fill: ['skills'] },
     { who: 'agent', text: "“Own it end-to-end” reads as Staff scope, not Senior. Should I calibrate up?", fill: [] },
-    { who: 'user',  text: "Yeah — Staff is fair. They're setting the foundation.", fill: ['level'] },
+    { who: 'user',  text: "Yeah - Staff is fair. They're setting the foundation.", fill: ['level'] },
     { who: 'agent', text: "Got it. Compensation range and location?", fill: [] },
-    { who: 'user',  text: "$170–210K plus equity. Austin, hybrid — 3 days on-site.", fill: ['comp', 'loc'] },
+    { who: 'user',  text: "$170–210K plus equity. Austin, hybrid - 3 days on-site.", fill: ['comp', 'loc'] },
     { who: 'agent', text: "That band sits about 15% under Austin Staff infra. Is equity meant to close the gap?", fill: [] },
-    { who: 'user',  text: "Equity's generous — 0.5–2%.", fill: [] },
+    { who: 'user',  text: "Equity's generous - 0.5–2%.", fill: [] },
     { who: 'agent', text: "Noted. And three days on-site roughly halves your active pool. Worth holding the line?", fill: [] },
     { who: 'user',  text: "Hold it. Culture matters early.", fill: [] },
-    { who: 'agent', text: "Locked in — Staff-level, self-directed, comp-aware, Austin-anchored. One conversation, full role intelligence. Building your search now.", fill: ['sig'] },
+    { who: 'agent', text: "Locked in - Staff-level, self-directed, comp-aware, Austin-anchored. One conversation, full role intelligence. Building your search now.", fill: ['sig'] },
     { who: 'system', text: "Role brief confirmed ✓", fill: [] }
   ];
 
@@ -1233,7 +1242,7 @@
       var k = keys[keys.length - 1];
       var val = (k === 'skills') ? 'Python · AWS · Distributed systems' : INTEL[k];
       var lab = document.querySelector('#view1 .field[data-f="' + k + '"] .k').textContent;
-      document.getElementById('intelMiniLast').textContent = '✓ ' + lab + ' — ' + val;
+      document.getElementById('intelMiniLast').textContent = '✓ ' + lab + ' - ' + val;
     }
   }
 
@@ -1445,10 +1454,10 @@
 
   /* ---------- Video mode ---------- */
   var CAPTIONS = {
-    1: { day: 'Day 0',     text: 'Define the role once — a 30-minute chat builds full role intelligence.', dur: 32500 },
-    2: { day: 'Hours',     text: 'Behind the scenes, Traast orchestrates everything — zero work on your side.', dur: 12000 },
-    3: { day: 'Day 1–3',   text: 'Five pre-vetted candidates — slots held on your calendar, one click to confirm.', dur: 12000 },
-    4: { day: 'Day 7',     text: 'Placement. You pay $200–500/month — only while the hire stays.',          dur: 9500 }
+    1: { day: 'Day 0',     text: 'Define the role once - a 30-minute chat builds full role intelligence.', dur: 32500 },
+    2: { day: 'Hours',     text: 'Behind the scenes, Traast orchestrates everything - zero work on your side.', dur: 12000 },
+    3: { day: 'Day 1-3',   text: 'Five pre-vetted candidates - slots held on your calendar, one click to confirm.', dur: 12000 },
+    4: { day: 'Day 7',     text: 'Placement. You pay $200-500/month - only while the hire stays.',          dur: 9500 }
   };
 
   function startVideo() {
