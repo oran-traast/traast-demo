@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-<title>Traast - Product Demo</title>
+<title>traast - Product Demo</title>
 
 <style>
   :root {
@@ -66,17 +66,17 @@
     color: var(--ink);
     animation: rise .7s ease both;
   }
-  #splash .wordmark { font-size: 25px; color: var(--navy); }
+  #splash .wordmark { font-size: 29.5px; color: var(--navy); }
   #splash .eyebrow {
     margin-top: 14px;
-    font-size: 12.5px;
+    font-size: 15px;
     font-weight: 600;
     letter-spacing: .28em;
     text-transform: uppercase;
     color: var(--muted);
   }
   #splash .tagline {
-    font-size: 46px;
+    font-size: 54.5px;
     font-weight: 800;
     letter-spacing: -0.025em;
     margin-top: 48px;
@@ -87,7 +87,7 @@
   #splash .sub {
     color: var(--muted);
     margin-top: 14px;
-    font-size: 16.5px;
+    font-size: 19.5px;
   }
   .statrow {
     display: flex;
@@ -106,7 +106,7 @@
   .stat-label {
     display: block;
     font-style: normal;
-    font-size: 17px;
+    font-size: 20px;
     font-weight: 700;
     color: var(--blue);
     letter-spacing: .02em;
@@ -114,12 +114,12 @@
   }
   .stat b {
     display: block;
-    font-size: 30px;
+    font-size: 35.5px;
     font-weight: 800;
     color: var(--ink);
     font-variant-numeric: tabular-nums;
   }
-  .stat span { font-size: 13px; color: var(--muted); }
+  .stat span { font-size: 15.5px; color: var(--muted); }
   .stat b .accent { color: var(--blue); }
 
   .splash-actions {
@@ -133,7 +133,7 @@
     border: 0;
     border-radius: 10px;
     padding: 13px 24px;
-    font-size: 15px;
+    font-size: 17.5px;
     font-weight: 600;
     transition: transform .15s ease, box-shadow .15s ease;
   }
@@ -141,8 +141,8 @@
   .btn:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
   .btn-primary { background: var(--blue); color: #fff; box-shadow: 0 8px 24px rgba(37,99,235,.25); }
   .btn-ghost { background: var(--card); color: var(--ink); border: 1px solid #D1D5DB; }
-  .fineprint { margin-top: 26px; font-size: 12px; color: #9CA3AF; }
-  #splash .fineprint { margin-top: 44px; font-size: 18px; color: var(--muted); }
+  .fineprint { margin-top: 26px; font-size: 14px; color: #9CA3AF; }
+  #splash .fineprint { margin-top: 44px; font-size: 21px; color: var(--muted); }
 
   /* ---------- App window ---------- */
   #app {
@@ -176,11 +176,11 @@
     background: #F3F4F6;
     color: var(--muted);
     border-radius: 6px;
-    font-size: 12px;
+    font-size: 14px;
     padding: 5px 12px;
     text-align: center;
   }
-  .chrome .wordmark { color: var(--navy); font-size: 15px; }
+  .chrome .wordmark { color: var(--navy); font-size: 17.5px; }
 
   /* Step nav */
   .stepnav {
@@ -219,7 +219,7 @@
     background: #fff;
     color: var(--navy);
     font-style: normal;
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 700;
     letter-spacing: .01em;
     padding: 4px 12px;
@@ -260,15 +260,15 @@
     border-radius: 50%;
     border: 2px solid var(--line);
     display: flex; align-items: center; justify-content: center;
-    font-size: 13px; font-weight: 700;
+    font-size: 15.5px; font-weight: 700;
     flex: none;
     color: var(--muted);
     background: var(--card);
   }
   .stepnav button .lbl { display: flex; flex-direction: column; min-width: 0; }
-  .stepnav button .lbl b { font-size: 13.5px; color: inherit; white-space: nowrap; }
+  .stepnav button .lbl b { font-size: 16px; color: inherit; white-space: nowrap; }
   .stepnav button .lbl span {
-    font-size: 11px;
+    font-size: 13px;
     text-transform: uppercase;
     letter-spacing: .06em;
     color: var(--muted);
@@ -278,24 +278,27 @@
   .stepnav button.done .num { background: var(--good); border-color: var(--good); color: #fff; }
   .stepnav .actor { font-style: normal; font-weight: 800; }
   .stepnav .actor.you { color: var(--blue); }
-  .stepnav .actor.traast { color: #0891B2; }
+  /* Brand stays lowercase even inside the uppercased meta line. */
+  .stepnav .actor.traast { color: #0891B2; text-transform: none; }
 
   /* Views */
-  .views { min-height: 510px; padding: 40px; }
+  /* Fixed height so the window never resizes between steps — keeps the
+     composition (and its scale-to-fit zoom) stable across navigation. */
+  .views { height: 780px; padding: 40px; overflow: hidden; }
   .view { animation: fadein .35s ease both; }
   .view-head { margin-bottom: 30px; }
   .view-head h2 {
-    font-size: 21px;
+    font-size: 25px;
     font-weight: 700;
     letter-spacing: -0.01em;
     text-wrap: balance;
   }
-  .view-head p { color: var(--muted); font-size: 14px; margin-top: 8px; }
+  .view-head p { color: var(--muted); font-size: 16.5px; margin-top: 8px; }
   .daytag {
     display: inline-block;
     background: var(--blue-soft);
     color: var(--blue);
-    font-size: 11.5px;
+    font-size: 13.5px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: .07em;
@@ -310,7 +313,7 @@
     margin-top: 12px;
     background: #E9FBFE;
     color: #0891B2;
-    font-size: 12.5px;
+    font-size: 15px;
     font-weight: 700;
     border-radius: 999px;
     padding: 6px 14px;
@@ -334,7 +337,7 @@
     display: flex; align-items: center; gap: 9px;
     padding: 16px 20px;
     border-bottom: 1px solid var(--line);
-    font-size: 13.5px; font-weight: 600;
+    font-size: 16px; font-weight: 600;
   }
   .livedot {
     width: 8px; height: 8px; border-radius: 50%;
@@ -342,7 +345,7 @@
     box-shadow: 0 0 0 0 rgba(5,150,105,.5);
     animation: pulse 2s infinite;
   }
-  .chat-head span { color: var(--muted); font-weight: 400; font-size: 12.5px; }
+  .chat-head span { color: var(--muted); font-weight: 400; font-size: 15px; }
   .chat-body {
     flex: 1;
     overflow-y: auto;
@@ -355,7 +358,7 @@
     max-width: 82%;
     padding: 9px 13px;
     border-radius: 12px;
-    font-size: 13.5px;
+    font-size: 16px;
     line-height: 1.45;
     animation: msgin .3s ease both;
   }
@@ -366,7 +369,7 @@
     background: var(--good-soft);
     color: var(--good);
     font-weight: 600;
-    font-size: 12.5px;
+    font-size: 15px;
     border-radius: 999px;
     padding: 6px 14px;
   }
@@ -383,7 +386,7 @@
   /* Mobile-only: pinned summary keeps the chat→data payoff visible above the fold */
   .intel-mini { display: none; }
   .intel-mini .im-last {
-    font-size: 12px;
+    font-size: 14px;
     color: var(--muted);
     white-space: nowrap;
     overflow: hidden;
@@ -391,8 +394,8 @@
   }
   .intel-mini .intel-bar { margin-bottom: 8px; }
   .intel-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
-  .intel-head b { font-size: 13.5px; }
-  .intel-head span { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .intel-head b { font-size: 16px; }
+  .intel-head span { font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
   .intel-bar {
     height: 5px; border-radius: 999px;
     background: var(--line);
@@ -407,13 +410,13 @@
   .field { padding: 12px 0; border-bottom: 1px solid var(--bg); }
   .field:last-child { border-bottom: 0; }
   .field .k {
-    font-size: 11px;
+    font-size: 13px;
     text-transform: uppercase;
     letter-spacing: .07em;
     color: var(--muted);
     margin-bottom: 3px;
   }
-  .field .v { font-size: 13.5px; font-weight: 600; min-height: 19px; }
+  .field .v { font-size: 16px; font-weight: 600; min-height: 19px; }
   .field .v .skeleton {
     display: inline-block;
     width: 60%; height: 11px;
@@ -427,7 +430,7 @@
     color: var(--blue);
     border-radius: 6px;
     padding: 2px 8px;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 600;
     margin: 2px 3px 0 0;
   }
@@ -454,20 +457,20 @@
     margin-bottom: 10px;
   }
   .stage:nth-child(even) .icon { background: #E9FBFE; color: var(--cyan); }
-  .stage b { display: block; font-size: 13px; margin-bottom: 8px; }
+  .stage b { display: block; font-size: 15.5px; margin-bottom: 8px; }
   .stage .count {
-    font-size: 22px;
+    font-size: 26px;
     font-weight: 800;
     letter-spacing: -0.02em;
     font-variant-numeric: tabular-nums;
   }
-  .stage .sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .stage .sub { font-size: 14px; color: var(--muted); margin-top: 2px; }
   .stage .arrow {
     position: absolute;
     right: -15px; top: 50%;
     transform: translateY(-50%);
     color: var(--muted);
-    font-size: 14px;
+    font-size: 16.5px;
     z-index: 1;
   }
   .loopband {
@@ -480,7 +483,7 @@
     align-items: center;
     gap: 12px;
     color: var(--ink);
-    font-size: 13.5px;
+    font-size: 16px;
     opacity: 0;
   }
   .loopband.on { animation: fadein .5s ease both; }
@@ -499,7 +502,7 @@
     gap: 12px;
     padding: 16px 22px;
     margin-bottom: 24px;
-    font-size: 13px;
+    font-size: 15.5px;
     flex-wrap: wrap;
   }
   .calstrip .cal-k { font-weight: 600; display: flex; align-items: center; gap: 8px; }
@@ -507,7 +510,7 @@
     border: 1px solid var(--line);
     border-radius: 8px;
     padding: 5px 12px;
-    font-size: 12.5px;
+    font-size: 15px;
     font-weight: 600;
     color: var(--ink);
     background: var(--card);
@@ -527,16 +530,16 @@
     width: 38px; height: 38px;
     border-radius: 50%;
     color: #fff;
-    font-size: 13px; font-weight: 700;
+    font-size: 15.5px; font-weight: 700;
     display: flex; align-items: center; justify-content: center;
     flex: none;
   }
   .cand .who { min-width: 0; flex: 1; }
-  .cand .who b { font-size: 14px; display: block; }
-  .cand .who span { font-size: 12.5px; color: var(--muted); }
+  .cand .who b { font-size: 16.5px; display: block; }
+  .cand .who span { font-size: 15px; color: var(--muted); }
   .cand .sig { display: flex; gap: 5px; flex-wrap: wrap; justify-content: flex-end; }
   .sigchip {
-    font-size: 11.5px;
+    font-size: 13.5px;
     font-weight: 600;
     border-radius: 999px;
     padding: 3px 9px;
@@ -552,18 +555,18 @@
     width: 58px;
   }
   .cand .match b {
-    font-size: 19px; font-weight: 800;
+    font-size: 22.5px; font-weight: 800;
     font-variant-numeric: tabular-nums;
     color: var(--blue);
   }
-  .cand .match span { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  .cand .match span { display: block; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
   .bookbtn {
     border: 1px solid var(--blue);
     background: var(--card);
     color: var(--blue);
     border-radius: 8px;
     padding: 7px 14px;
-    font-size: 12.5px;
+    font-size: 15px;
     font-weight: 700;
     flex: none;
     width: 158px;
@@ -603,13 +606,13 @@
     display: flex; align-items: center; justify-content: center;
     margin-bottom: 6px;
   }
-  .placed h3 { font-size: 17px; }
-  .placed p { color: var(--muted); font-size: 13.5px; }
+  .placed h3 { font-size: 20px; }
+  .placed p { color: var(--muted); font-size: 16px; }
   .placed .timeline {
     margin-top: 12px;
     display: flex;
     gap: 8px;
-    font-size: 11.5px;
+    font-size: 13.5px;
     color: var(--muted);
     flex-wrap: wrap;
     justify-content: center;
@@ -619,19 +622,21 @@
 
   .compare { padding: 28px; opacity: 0; }
   .compare.on { animation: rise .5s .25s ease both; }
-  .compare h3 { font-size: 15px; margin-bottom: 14px; }
+  .compare h3 { font-size: 17.5px; margin-bottom: 14px; }
   .cmp-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .cmp {
     border-radius: 10px;
     padding: 14px;
-    font-size: 13px;
+    font-size: 15.5px;
   }
   .cmp.traast { background: var(--navy); color: #fff; }
   .cmp.agency { background: var(--bg); border: 1px solid var(--line); color: var(--muted); }
-  .cmp .cmp-t { font-size: 12px; text-transform: uppercase; letter-spacing: .07em; opacity: .7; }
-  .cmp .cmp-price { font-size: 23px; font-weight: 800; margin: 6px 0 2px; letter-spacing: -0.02em; }
+  .cmp .cmp-t { font-size: 14px; text-transform: uppercase; letter-spacing: .07em; opacity: .7; }
+  /* Brand keeps its lowercase wordmark styling, not the uppercased label. */
+  .cmp.traast .cmp-t { text-transform: none; letter-spacing: -0.01em; }
+  .cmp .cmp-price { font-size: 27px; font-weight: 800; margin: 6px 0 2px; letter-spacing: -0.02em; }
   .cmp.traast .cmp-price { color: var(--cyan); }
-  .cmp .cmp-sub { font-size: 12px; margin-bottom: 10px; }
+  .cmp .cmp-sub { font-size: 14px; margin-bottom: 10px; }
   .cmp.traast .cmp-sub { color: #8BE3F5; }
   .cmp.agency .cmp-sub { color: var(--muted); }
   .cmp ul { list-style: none; display: flex; flex-direction: column; gap: 5px; }
@@ -640,7 +645,7 @@
   .cmp.agency li::before { content: "✕"; position: absolute; left: 0; color: #DC2626; font-weight: 700; }
   .bigline {
     margin-top: 14px;
-    font-size: 14.5px;
+    font-size: 17px;
     font-weight: 700;
     text-align: center;
   }
@@ -656,7 +661,7 @@
     background: var(--card);
   }
   .footbar .note {
-    font-size: 12.5px;
+    font-size: 15px;
     color: var(--muted);
     flex: 1;
     min-width: 0;
@@ -673,7 +678,7 @@
     border: 0;
     border-radius: 9px;
     padding: 10px 20px;
-    font-size: 14px;
+    font-size: 16.5px;
     font-weight: 700;
   }
   .backbtn {
@@ -682,7 +687,7 @@
     border: 1px solid var(--line);
     border-radius: 9px;
     padding: 10px 16px;
-    font-size: 14px;
+    font-size: 16.5px;
     font-weight: 600;
   }
 
@@ -697,7 +702,7 @@
     color: var(--muted);
     border-radius: 7px;
     padding: 6px 12px;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 600;
   }
   .pausebtn {
@@ -706,32 +711,13 @@
     color: var(--blue);
     border-radius: 7px;
     padding: 6px 12px;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 700;
     min-width: 84px;
   }
   .pausebtn[aria-pressed="true"] {
     background: var(--blue-soft);
   }
-
-  /* ---------- End frame ---------- */
-  #endframe {
-    position: fixed;
-    inset: 0;
-    background:
-      radial-gradient(1000px 500px at 70% 0%, rgba(37,99,235,.07), transparent 60%),
-      #F7F8FA;
-    z-index: 60;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: var(--ink);
-    padding: 20px;
-  }
-  #endframe .inner { animation: rise .7s ease both; max-width: 760px; }
-  #endframe .wordmark { font-size: 40px; color: var(--navy); }
-  #endframe .tagline { font-size: 27px; font-weight: 800; letter-spacing: -0.02em; margin-top: 14px; color: var(--ink); }
 
   /* ---------- Animations ---------- */
   @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
@@ -763,20 +749,20 @@
       overflow: visible;
     }
     #stage { width: 100%; }
-    .navtip { font-size: 10px; padding: 3px 9px; }
+    .navtip { font-size: 12px; padding: 3px 9px; }
     .navtip-track { left: 30px; right: 30px; }
     .intake-grid, .place-grid, .cmp-cols { grid-template-columns: 1fr; }
     .chat { height: 330px; }
     .pipe { grid-template-columns: repeat(2, 1fr); }
     .stage .arrow { display: none; }
     .stepnav button .lbl span { display: none; }
-    .stepnav button .lbl b { white-space: normal; font-size: 12px; }
+    .stepnav button .lbl b { white-space: normal; font-size: 14px; }
     .stepnav { overflow-x: auto; }
     .cand { flex-wrap: wrap; }
     .cand .sig { justify-content: flex-start; width: 100%; order: 5; }
-    #splash .wordmark { font-size: 22px; }
-    #splash .tagline { font-size: 30px; }
-    .views { padding: 14px; min-height: 0; }
+    #splash .wordmark { font-size: 26px; }
+    #splash .tagline { font-size: 35.5px; }
+    .views { padding: 14px; height: auto; overflow: visible; }
     /* The pinned mini strip carries the header + bar on mobile — hide the
        panel's own copy so there's only one Role intelligence bar on screen */
     .intel > .intel-head, .intel > .intel-bar { display: none; }
@@ -796,10 +782,10 @@
   <div class="wordmark">traast<span class="dot">.</span></div>
   <div class="tagline">Recruiting 2.0.</div>
   <div class="eyebrow">A new approach to hiring</div>
-  <div class="sub">A software-driven recruiting service that delivers qualified interviews within days.</div>
+  <div class="sub">traast turns a 30-minute role intake into qualified candidates on your calendar.</div>
 
   <div class="statrow">
-    <div class="stat"><i class="stat-label">Fast</i><b>1-3 <span class="accent">days</span></b><span>to first interview</span></div>
+    <div class="stat"><i class="stat-label">Fast</i><b>1-3</b><span>days to first interview</span></div>
     <div class="stat"><i class="stat-label">High Quality</i><b>5</b><span>pre-vetted candidates</span></div>
     <div class="stat"><i class="stat-label">Fair By Design</i><b>30<span class="accent">×</span></b><span>cheaper than agency fees</span></div>
   </div>
@@ -825,7 +811,7 @@
 
     <div class="stepnav" id="stepnav">
       <button data-step="1"><span class="num">1</span><span class="lbl"><b>Define the role</b><span><i class="actor you">Alex</i> · Day 0 · 30 min</span></span></button>
-      <button data-step="2"><span class="num">2</span><span class="lbl"><b>Traast engine</b><span><i class="actor traast">Traast</i> · Automated</span></span></button>
+      <button data-step="2"><span class="num">2</span><span class="lbl"><b>traast engine</b><span><i class="actor traast">traast</i> · Automated</span></span></button>
       <button data-step="3"><span class="num">3</span><span class="lbl"><b>Interviews booked</b><span><i class="actor you">Alex</i> · Day 1-3</span></span></button>
       <button data-step="4"><span class="num">4</span><span class="lbl"><b>Placement</b><span>Success-based</span></span></button>
       <i class="navprog" id="navProg"></i>
@@ -839,11 +825,11 @@
         <div class="view-head">
           <span class="daytag">Day 0</span>
           <h2>Define the role once - a quick chat, not a 3-week brief</h2>
-          <p>Traast's intake agent turns one conversation into structured role intelligence.</p>
+          <p>traast's intake agent turns one conversation into structured role intelligence.</p>
         </div>
         <div class="intake-grid">
           <div class="card chat">
-            <div class="chat-head"><span class="livedot"></span>Traast intake agent&nbsp;<span>· online</span></div>
+            <div class="chat-head"><span class="livedot"></span>traast intake agent&nbsp;<span>· online</span></div>
             <div class="chat-body" id="chatBody"></div>
           </div>
           <div class="card intel-mini" id="intelMini">
@@ -868,9 +854,9 @@
       <section class="view" id="view2" hidden>
         <div class="view-head">
           <span class="daytag">A few hours later</span>
-          <h2>Behind the scenes: Traast orchestrates everything automatically</h2>
+          <h2>Behind the scenes: traast orchestrates everything automatically</h2>
           <p>Sourcing, scoring and ranking, outreach, qualification, scheduling - zero work on your side.</p>
-          <div class="autobadge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.001a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.001a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Fully automated - this is Traast's side of the journey, not yours</div>
+          <div class="autobadge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.001a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.001a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Fully automated - this is traast's side of the journey, not yours</div>
         </div>
         <div class="pipe" id="pipe">
           <div class="card stage">
@@ -942,7 +928,7 @@
       <!-- STEP 4 -->
       <section class="view" id="view4" hidden>
         <div class="view-head">
-          <span class="daytag">Day 7</span>
+          <span class="daytag">Day 3+</span>
           <h2>Placement made - you only pay while it lasts</h2>
           <p>Success-based, monthly, cash-flow-friendly. No upfront agency fee.</p>
         </div>
@@ -950,18 +936,18 @@
           <div class="card placed" id="placedCard">
             <div class="bigcheck"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
             <h3>Jordan Reyes signed - Founding Backend Engineer</h3>
-            <p>Offer accepted on day 7. Traast verifies ongoing employment automatically.</p>
+            <p>Offer accepted on day 3+. traast verifies ongoing employment automatically.</p>
             <div class="timeline">
               <span class="tl-dot"><i></i>Day 0 · role defined</span>
               <span class="tl-dot"><i></i>Day 2 · first interview</span>
-              <span class="tl-dot"><i></i>Day 7 · offer signed</span>
+              <span class="tl-dot"><i></i>Day 3+ · offer signed</span>
             </div>
           </div>
           <div class="card compare" id="compareCard">
             <h3>What you pay</h3>
             <div class="cmp-cols">
               <div class="cmp traast">
-                <div class="cmp-t">Traast</div>
+                <div class="cmp-t">traast</div>
                 <div class="cmp-price">$200-500/mo</div>
                 <div class="cmp-sub">juniors: $200 · mid/seniors: $500</div>
                 <ul>
@@ -973,7 +959,7 @@
               <div class="cmp agency">
                 <div class="cmp-t">Traditional agency</div>
                 <div class="cmp-price">$16K–$60K</div>
-                <div class="cmp-sub">≈ 20–25% of annual salary, per hire</div>
+                <div class="cmp-sub">≈ 20–30% of annual salary, per hire</div>
                 <ul>
                   <li>Single upfront success fee</li>
                   <li>No retention accountability</li>
@@ -991,7 +977,7 @@
     <!-- One permanent bar: narration always on the left, only the actions
          change between explore (Back/Next) and video (Exit) -->
     <div class="footbar">
-      <span class="note">Traast product demo<span id="footText"></span></span>
+      <span class="note">traast product demo<span id="footText"></span></span>
       <div class="navbtns">
         <button class="backbtn" id="backBtn">← Back</button>
         <button class="nextbtn" id="nextBtn">Next →</button>
@@ -1005,24 +991,6 @@
 </div>
 
 </div><!-- /#stage -->
-
-<!-- ================= END FRAME ================= -->
-<div id="endframe" hidden>
-  <div class="inner">
-    <div class="wordmark">traast<span class="dot">.</span></div>
-    <div class="tagline">Stop hiring. Start choosing.</div>
-    <div class="statrow">
-      <div class="stat"><i class="stat-label">Fast</i><b>1-3 <span class="accent">days</span></b><span>to first interview</span></div>
-      <div class="stat"><i class="stat-label">High Quality</i><b>5</b><span>pre-vetted candidates</span></div>
-      <div class="stat"><i class="stat-label">Fair By Design</i><b>30<span class="accent">×</span></b><span>cheaper than agency fees</span></div>
-    </div>
-    <div class="splash-actions">
-      <button class="btn btn-primary" id="replayBtn">▶&nbsp; Replay</button>
-      <button class="btn btn-ghost" id="backToDemoBtn">Explore step by step</button>
-    </div>
-    <div class="fineprint">traast.com · AI-native recruiting for US startups</div>
-  </div>
-</div>
 
 <script>
 (function () {
@@ -1069,7 +1037,6 @@
 
   var splash = document.getElementById('splash');
   var app = document.getElementById('app');
-  var endframe = document.getElementById('endframe');
   var nextBtn = document.getElementById('nextBtn');
   var backBtn = document.getElementById('backBtn');
   var stepnavBtns = Array.prototype.slice.call(document.querySelectorAll('#stepnav button'));
@@ -1078,9 +1045,12 @@
   var videoMode = false;
   var videoPaused = false;
 
-  /* ---------- Scale-to-fit: the whole demo always fits the viewport ---------- */
+  /* ---------- Scale-to-fit: the whole demo always fills the viewport ---------- */
   var stage = document.getElementById('stage');
-  var endInner = document.querySelector('#endframe .inner');
+  /* Scale up as well as down so the composition uses the available space
+     instead of sitting small with wide margins (capped so it never gets
+     absurd on very large monitors). */
+  var MAX_ZOOM = 1.6;
 
   function fitOne(el) {
     el.style.zoom = '';
@@ -1090,14 +1060,14 @@
     var s = Math.min(
       (window.innerWidth - pad * 2) / w,
       (window.innerHeight - pad * 2) / h,
-      1
+      MAX_ZOOM
     );
-    if (s < 1) el.style.zoom = s;
+    el.style.zoom = s;
   }
 
   function fit() {
     var mobile = window.matchMedia('(max-width: 880px) and (orientation: portrait)').matches;
-    [splash, stage, endInner].forEach(function (el) {
+    [splash, stage].forEach(function (el) {
       if (mobile) { el.style.zoom = ''; return; }
       fitOne(el);
     });
@@ -1111,7 +1081,7 @@
   var navProg = document.getElementById('navProg');
   var navTip = document.getElementById('navTip');
 
-  var TIP_LABELS = { 1: 'Day 0 · 30 min', 2: 'A few hours', 3: 'Day 1-3', 4: 'Day 7' };
+  var TIP_LABELS = { 1: 'Day 0 · 30 min', 2: 'A few hours', 3: 'Day 1-3', 4: 'Day 3+' };
   /* Video mode: the chip is event-locked — it only ticks when something
      visible justifies it. Scene 2 ticks as each pipeline stage lights up
      (300 + i*850, mirroring runStep2); scene 3 ticks as each day's
@@ -1128,7 +1098,7 @@
       { t: 4600, label: 'Day 2' },
       { t: 8800, label: 'Day 3' }
     ],
-    4: [{ t: 200, label: 'Day 7' }]
+    4: [{ t: 200, label: 'Day 3+' }]
   };
 
   function navProgTo(pct, ms, timing) {
@@ -1437,27 +1407,27 @@
 
   function showApp() {
     splash.hidden = true;
-    endframe.hidden = true;
     app.hidden = false;
   }
 
+  /* Finishing the journey returns to the opening landing screen. */
   function showEnd() {
     clearTimers();
     app.hidden = true;
-    splash.hidden = true;
     document.getElementById('exitVideo').hidden = true;
     setPauseUI(false, true);
     document.body.classList.remove('video-on');
     videoMode = false;
-    endframe.hidden = false;
+    splash.hidden = false;
+    fit();
   }
 
   /* ---------- Video mode ---------- */
   var CAPTIONS = {
     1: { day: 'Day 0',     text: 'Define the role once - a 30-minute chat builds full role intelligence.', dur: 32500 },
-    2: { day: 'Hours',     text: 'Behind the scenes, Traast orchestrates everything - zero work on your side.', dur: 12000 },
-    3: { day: 'Day 1-3',   text: 'Five pre-vetted candidates - slots held on your calendar, one click to confirm.', dur: 12000 },
-    4: { day: 'Day 7',     text: 'Placement. You pay $200-500/month - only while the hire stays.',          dur: 9500 }
+    2: { day: 'Hours',     text: 'Behind the scenes, traast orchestrates everything - zero work on your side.', dur: 12000 },
+    3: { day: 'Day 1-3',   text: 'Pre-vetted candidates - slots held on your calendar, one click to confirm.', dur: 12000 },
+    4: { day: 'Day 3+',    text: 'You pay $200-500/month - only while the hire stays.',          dur: 9500 }
   };
 
   function startVideo() {
@@ -1528,11 +1498,7 @@
 
   /* ---------- Wiring ---------- */
   document.getElementById('playBtn').addEventListener('click', startVideo);
-  document.getElementById('replayBtn').addEventListener('click', startVideo);
   document.getElementById('exploreBtn').addEventListener('click', function () {
-    stopVideo(); showApp(); goStep(1);
-  });
-  document.getElementById('backToDemoBtn').addEventListener('click', function () {
     stopVideo(); showApp(); goStep(1);
   });
   document.getElementById('exitVideo').addEventListener('click', function () {
