@@ -2,13 +2,24 @@
 <html>
 <head>
   <meta charset="utf-8">
+  <!-- Must precede the router below: it reads matchMedia('(max-width:880px)'),
+       which needs the device width. Without this the router sees the default
+       ~980px viewport, disagrees with index.html, and the two redirect-loop. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Bundled Page</title>
   <script>
+    /* Mirror of index.html's router — the SAME decision, so the two can
+       never disagree and loop. auto (no param): mobile only on a real touch
+       device. ?mobile=1 forces this page, ?desktop=1 forces index.html.
+       Decided once at load; no param is ever added automatically. */
     (function () {
-      var params = new URLSearchParams(location.search);
-      if (params.get('mobile') === '1') return;
-      var isSmallTouch = window.matchMedia('(max-width: 880px)').matches && window.matchMedia('(pointer: coarse)').matches;
-      if (params.get('desktop') === '1' || !isSmallTouch) {
+      var p = new URLSearchParams(location.search);
+      var forced = p.get('desktop') === '1' ? 'desktop'
+                 : p.get('mobile')  === '1' ? 'mobile' : null;
+      var autoMobile = window.matchMedia('(max-width: 880px)').matches
+                    && window.matchMedia('(pointer: coarse)').matches;
+      var wantMobile = forced ? (forced === 'mobile') : autoMobile;
+      if (!wantMobile) {
         location.replace('index.html' + location.search + location.hash);
       }
     })();

@@ -3,6 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+  /* Route between this desktop build and mobile.html. Both files run this
+     IDENTICAL decision, so they always agree and can never loop.
+       - auto (no param): mobile only on a real touch device
+       - ?mobile=1  forces mobile.html   - ?desktop=1 forces this page
+     Decided once at load; no param is ever added automatically, so nothing
+     gets stuck — remove the param and the device decides again. */
+  (function () {
+    var p = new URLSearchParams(location.search);
+    var forced = p.get('desktop') === '1' ? 'desktop'
+               : p.get('mobile')  === '1' ? 'mobile' : null;
+    var autoMobile = window.matchMedia('(max-width: 880px)').matches
+                  && window.matchMedia('(pointer: coarse)').matches;
+    var wantMobile = forced ? (forced === 'mobile') : autoMobile;
+    if (wantMobile) {
+      location.replace('mobile.html' + location.search + location.hash);
+    }
+  })();
+</script>
 </head>
 <body>
 <title>traast - Product Demo</title>
@@ -1047,12 +1066,13 @@
 
   /* ---------- Scale-to-fit: the whole demo always fills the viewport ---------- */
   var stage = document.getElementById('stage');
-  /* Scale up as well as down so the composition uses the available space
-     instead of sitting small with wide margins (capped so it never gets
-     absurd on very large monitors). */
-  var MAX_ZOOM = 1.6;
+  /* The dense app steps scale UP to use the available space; the landing hero
+     is designed at a fixed width, so it only ever scales DOWN to fit — at its
+     natural size it sits centered with margins instead of ballooning. */
+  var STAGE_MAX_ZOOM = 1.6;
+  var SPLASH_MAX_ZOOM = 1;
 
-  function fitOne(el) {
+  function fitOne(el, maxZoom) {
     el.style.zoom = '';
     var w = el.offsetWidth, h = el.offsetHeight;
     if (!w || !h) return; /* hidden */
@@ -1060,17 +1080,16 @@
     var s = Math.min(
       (window.innerWidth - pad * 2) / w,
       (window.innerHeight - pad * 2) / h,
-      MAX_ZOOM
+      maxZoom
     );
-    el.style.zoom = s;
+    el.style.zoom = s === 1 ? '' : s; /* no-op at 1:1 — render at native size */
   }
 
   function fit() {
     var mobile = window.matchMedia('(max-width: 880px) and (orientation: portrait)').matches;
-    [splash, stage].forEach(function (el) {
-      if (mobile) { el.style.zoom = ''; return; }
-      fitOne(el);
-    });
+    if (mobile) { splash.style.zoom = ''; stage.style.zoom = ''; return; }
+    fitOne(splash, SPLASH_MAX_ZOOM);
+    fitOne(stage, STAGE_MAX_ZOOM);
   }
 
   window.addEventListener('resize', fit);
